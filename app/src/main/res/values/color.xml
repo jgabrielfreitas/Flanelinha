@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="stone_actionbar">#009688</color>
+    <color name="stone_statusbar">#303F9F</color>
+    <color name="stone_title_activity">#072240</color>
+    <color name="stone_background">#efefef</color>
+    <color name="stone_text_primary">#212121</color>
+    <color name="stone_text_secundary">#727272</color>
+    <color name="stone_text_subtext">#999999</color>
+</resources>
