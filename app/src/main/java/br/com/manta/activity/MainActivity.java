@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,14 +15,17 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.manta.mantaray.FakeLocation;
+import br.com.manta.adapter.ItemAdapter;
+import br.com.manta.informations.LocationXml;
+import br.com.manta.mantaray.MenuItem;
 import br.com.manta.mantaray.R;
-
+import br.com.manta.mantaray.Utils;
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
-    ListView listViewMenu;
-    List<String> optionsArray = new ArrayList<>();
+    List<MenuItem> optionsArray = new ArrayList<>();
+    ListView       listViewMenu;
+    ItemAdapter    adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +38,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         listViewMenu = (ListView) findViewById(R.id.mainActivityMenuListView);
 
-        optionsArray.add("Realizar check-in");
-        optionsArray.add("Realizar busca");
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.marker_flanelinha), "Realizar checkin", "Marque aqui onde está o seu carro"));
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.flag)             , "Realizar busca"  , "Mostrar caminho até seu carro"));
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.about)            , "Sobre"  ,          "Informações do aplicativo"));
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this,
-                                                               android.R.layout.simple_list_item_1,
-                                                               optionsArray);
-        listViewMenu.setAdapter(arrayAdapter);
+        adapter  = new ItemAdapter(optionsArray, getApplicationContext());
+
+        listViewMenu.setAdapter(adapter);
         listViewMenu.setOnItemClickListener(this);
     }
 
@@ -83,11 +84,17 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 //        if (latLng != null)
 //            CheckinActivity.lastCoordinates = latLng;
 
-
         // for tests... [FAKE LOCATION]
-        Location testLocation = FakeLocation.createLocation(FakeLocation.LAT, FakeLocation.LNG, FakeLocation.ACCURACY);
-        LatLng latLngDebug = new LatLng(testLocation.getLatitude(), testLocation.getLongitude()); // create a fake location
-        CheckinActivity.lastCoordinates = latLngDebug; // mark in map the fake location
+        //Location testLocation = Utils.createFakeLocation();
+        if(Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
+            LocationXml testLocation = Utils.getInformationsAboutLastLocation(this);
+            LatLng latLngDebug = new LatLng(testLocation.latitude, testLocation.longitude); // create a fake location
+            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the fake location
+        }
+
+        Utils.getClientLocation(getApplicationContext()); // get user's location
+        CheckinActivity.location = Utils.currentLocation; // set location to map
+
 
     }
 }

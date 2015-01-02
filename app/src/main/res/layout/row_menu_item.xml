@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <ImageView
+        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/flag"
+        android:id="@+id/item_image_view" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:layout_marginTop="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Titulo da opção"
+        android:id="@+id/item_title"
+        android:textColor="@color/dark_violet"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/item_image_view"
+        android:layout_toEndOf="@+id/item_image_view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Esta opção faz blablabla"
+        android:textColor="@color/text_secundary"
+        android:id="@+id/item_sub_title"
+        android:layout_below="@+id/item_title"
+        android:layout_alignLeft="@+id/item_title"
+        android:layout_alignStart="@+id/item_title" />
+
+</RelativeLayout>

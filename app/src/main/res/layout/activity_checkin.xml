@@ -17,7 +17,7 @@
         android:layout_height="50dp"
         android:text="Realizar check-in aqui!"
         android:id="@+id/checkinButton"
-        android:background="@color/stone_statusbar"
+        android:background="@color/dark_violet"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
