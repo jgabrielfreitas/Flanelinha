@@ -12,4 +12,6 @@
     <color name="cool_blue">#2E64B6</color>
     <color name="light_blue">#2B80AC</color>
     <color name="dark_light_blue">#256D92</color>
+    <color name="dark_gray">#7F7F7F</color>
+    <color name="note_gray_background">#A1ACB2</color>
 </resources>

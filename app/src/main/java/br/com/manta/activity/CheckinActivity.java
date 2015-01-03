@@ -4,9 +4,11 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +33,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private Button    checkinButton;
+    private TextView  noteTextView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +43,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     }
 
     private void instanceViews() {
+        noteTextView  = (TextView) findViewById(R.id.noteTextView);
         checkinButton = (Button) findViewById(R.id.checkinButton);
-        checkinButton.setOnClickListener(this);
 
+        noteTextView.setText(Html.fromHtml(getString(R.string.note)));
+        checkinButton.setOnClickListener(this);
     }
 
     private void setUpMapIfNeeded() {

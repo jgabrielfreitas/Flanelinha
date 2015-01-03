@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -18,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
+import br.com.manta.activity.CheckinActivity;
 import br.com.manta.informations.LocationXml;
 import br.com.manta.services.GPSTracker;
 
@@ -27,8 +29,9 @@ import br.com.manta.services.GPSTracker;
 public class Utils {
 
     public static final String CACHE_LAST_CHECKIN = "LAST_CHECKIN.xml";
-    public static Location currentLocation;
+    public static String PACKAGE_NAME;
 
+    // create cache with name and content
     public static void createCache(final String nameCache, final String toSave, final Context context, final String classRequest) {
 
         new Thread() {
@@ -51,8 +54,8 @@ public class Utils {
         }.start();
     }
 
+    // Create a fake location for tests
     public static Location createFakeLocation() {
-        // Create a random location
         Location fakeLocation = new Location("flp");
         fakeLocation.setLatitude(-22.93755403);
         fakeLocation.setLongitude(-43.35825153);
@@ -60,8 +63,8 @@ public class Utils {
         return fakeLocation;
     }
 
+    // method to close keyboard
     public static void hideKeyboard(final Activity activity) {
-
         Thread thread = new Thread() {
             public void run() {
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -82,6 +85,7 @@ public class Utils {
         }
     }
 
+    // return coordinates from the last check-in
     public static LocationXml getInformationsAboutLastLocation(Context context) {
 
         if (justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
@@ -121,9 +125,10 @@ public class Utils {
         }
     }
 
+    // check if cache exists
     public static boolean justCheckFileCache(String cache) {
 
-        File file = new File("/data/data/br.com.manta.mantaray/files/" + cache);
+        File file = new File("/data/data/"+ PACKAGE_NAME +"/files/" + cache);
 
         if (file.exists())
             return true;
@@ -131,6 +136,7 @@ public class Utils {
             return false;
     }
 
+    // save cache with current coordinates
     public static void createCheckin(Location location, Activity activity){
 
         try {
@@ -152,16 +158,40 @@ public class Utils {
 
     }
 
-    public static void getClientLocation(Context context){
+    // return current location
+    public static Location getClientLocation(Context context){
 
-        currentLocation = new Location("dummyprovider");
+        Location currentLocation = new Location("dummyprovider");
+
         GPSTracker gps = new GPSTracker(context);
         if(gps.canGetLocation()) { // gps enabled | return boolean
             currentLocation.setLatitude(gps.getLatitude());
             currentLocation.setLongitude(gps.getLongitude());
         }
 
+        return currentLocation;
 
+    }
+
+    public static void markLastLocationInGoogleMap(Activity activity, boolean debug) {
+
+        if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
+            return;
+
+        LatLng latLngDebug;
+        if (debug) {
+
+            Location testLocation = Utils.createFakeLocation();   // for tests... [FAKE LOCATION]
+            latLngDebug = new LatLng(testLocation.getLatitude(), testLocation.getLongitude());
+            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the location
+            Log.i("Checkin","the last coordinates were recovered");
+        } else {
+
+            LocationXml testLocation = Utils.getInformationsAboutLastLocation(activity); // get coordinates from last check-in
+            latLngDebug = new LatLng(testLocation.latitude, testLocation.longitude);
+            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the location
+            Log.i("Checkin","the last coordinates were recovered");
+        }
     }
 
 }
