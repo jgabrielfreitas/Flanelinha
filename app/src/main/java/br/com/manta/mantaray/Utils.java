@@ -123,7 +123,7 @@ public class Utils {
 
     public static boolean justCheckFileCache(String cache) {
 
-        File file = new File("/data/data/br.com.stone/files/" + cache);
+        File file = new File("/data/data/br.com.manta.mantaray/files/" + cache);
 
         if (file.exists())
             return true;
@@ -136,9 +136,11 @@ public class Utils {
         try {
 
             LocationXml lastLocation = new LocationXml();
+            lastLocation.latitude  = location.getLatitude();
+            lastLocation.longitude = location.getLongitude();
 
             XStream xstream = new XStream(new DomDriver());
-            xstream.processAnnotations(new Class[] { Location.class });
+            xstream.processAnnotations(new Class[] { LocationXml.class });
 
             String dados = xstream.toXML(lastLocation);
 

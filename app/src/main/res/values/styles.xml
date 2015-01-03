@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/dark_violet</item>
-        <item name="colorPrimaryDark">@color/dark_violet</item>
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/dark_light_blue</item>
         <item name="android:textColorPrimary">#ffffff</item>
         <item name="android:windowBackground">@color/stone_background</item>
     </style>

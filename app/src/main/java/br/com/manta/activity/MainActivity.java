@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -38,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         listViewMenu = (ListView) findViewById(R.id.mainActivityMenuListView);
 
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.marker_flanelinha), "Realizar checkin", "Marque aqui onde está o seu carro"));
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.marker_flanelinha), "Realizar check-in", "Marque aqui onde está o seu carro"));
         optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.flag)             , "Realizar busca"  , "Mostrar caminho até seu carro"));
         optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.about)            , "Sobre"  ,          "Informações do aplicativo"));
 
@@ -69,31 +70,20 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) { // check if LAST_CHECKIN exist
+            Location testLocation = Utils.createFakeLocation(); // for tests... [FAKE LOCATION]
+            LatLng latLngDebug = new LatLng(testLocation.getLatitude(), testLocation.getLongitude());
 
-        // Creating a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
-
-        // Getting the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-
-        // Getting Current Location
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude()); // latLng: -22.92655203 , -43.25726123
-
-//        if (latLng != null)
-//            CheckinActivity.lastCoordinates = latLng;
-
-        // for tests... [FAKE LOCATION]
-        //Location testLocation = Utils.createFakeLocation();
-        if(Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
-            LocationXml testLocation = Utils.getInformationsAboutLastLocation(this);
-            LatLng latLngDebug = new LatLng(testLocation.latitude, testLocation.longitude); // create a fake location
-            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the fake location
+//            LocationXml testLocation = Utils.getInformationsAboutLastLocation(this); // get coordinates from last check-in
+//            LatLng latLngDebug = new LatLng(testLocation.latitude, testLocation.longitude);
+            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the location
+            Log.i("Checkin","the last coordinates were recovered");
         }
 
         Utils.getClientLocation(getApplicationContext()); // get user's location
         CheckinActivity.location = Utils.currentLocation; // set location to map
+        Log.i("Location","current location was successfully captured");
+
 
 
     }

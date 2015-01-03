@@ -18,7 +18,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Titulo da opção"
         android:id="@+id/item_title"
-        android:textColor="@color/dark_violet"
+        android:textColor="@color/dark_light_blue"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/item_image_view"
