@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginLeft="@dimen/half_default_margin_between_views"
@@ -7,121 +6,128 @@
     android:layout_marginTop="@dimen/half_default_margin_between_views"
     android:layout_marginBottom="@dimen/half_default_margin_between_views">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:fillViewport="false">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:fillViewport="false">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutInScroll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <fragment
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/half_default_margin_between_views"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <fragment
-                    android:layout_width="fill_parent"
-                    android:layout_height="150dp"
-                    android:id="@+id/map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <RelativeLayout
-                    android:layout_marginTop="@dimen/default_margin_between_views"
-                    android:layout_width="fill_parent"
-                    android:layout_height="55dp"
-                    android:background="@color/note_gray_background"
-                    android:id="@+id/relativeLayout"
-                    android:layout_below="@+id/map"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-
-                    <TextView
-                        android:id="@+id/noteTextView"
-                        android:layout_marginLeft="@dimen/default_margin_between_views"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:textColor="@color/dark_gray"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
-                </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:background="@drawable/note_card"
+                android:id="@+id/relativeLayout"
+                android:layout_below="@+id/map"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_light_blue"
-                    android:layout_marginTop="@dimen/default_margin_between_views"
+                    android:id="@+id/noteTextView"
+                    android:layout_marginLeft="@dimen/default_margin_between_views"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/local_name"
-                    android:id="@+id/textView"
-                    android:layout_below="@+id/relativeLayout"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/localNameEditText"
-                    android:layout_below="@+id/textView"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/dark_gray"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/detailsLocalEditText"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textView2"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_light_blue"
-                    android:layout_marginTop="@dimen/default_margin_between_views"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/details_local"
-                    android:id="@+id/textView2"
-                    android:layout_below="@+id/localNameEditText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <Button
-                    android:layout_marginTop="@dimen/default_margin_between_views"
-                    android:layout_below="@+id/detailsLocalEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:text="@string/finish_checkin"
-                    android:id="@+id/checkinButton"
-                    android:background="@color/dark_violet"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
             </RelativeLayout>
 
-        </ScrollView>
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/dark_light_blue"
+                android:layout_marginTop="@dimen/default_margin_between_views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/local_name"
+                android:id="@+id/textView"
+                android:layout_below="@+id/relativeLayout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-    </RelativeLayout>
+            <EditText
+                android:singleLine="true"
+                android:textColor="@color/dark_gray"
+                android:hint="@string/optional_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/localNameEditText"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:imeOptions="actionNext" />
+
+            <EditText
+                android:textColor="@color/dark_gray"
+                android:hint="@string/optional_field_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:id="@+id/detailsLocalEditText"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:imeOptions="actionDone" />
+
+            <TextView
+                android:textStyle="bold"
+                android:textColor="@color/dark_light_blue"
+                android:layout_marginTop="@dimen/default_margin_between_views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/details_local"
+                android:id="@+id/textView2"
+                android:layout_below="@+id/localNameEditText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:textColor="@color/project_background"
+                android:layout_marginTop="@dimen/default_margin_between_views"
+                android:layout_below="@+id/detailsLocalEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/finish_checkin"
+                android:id="@+id/checkinButton"
+                android:background="@drawable/button_card_selector"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

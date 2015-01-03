@@ -25,7 +25,7 @@ public class GPSTracker extends Service implements LocationListener{
 
     boolean canGetLocation = false;
 
-    Location location;  // location
+    Location location;  // currentLocation
     double   latitude;  // latitude
     double   longitude; // longitude
 
@@ -60,7 +60,7 @@ public class GPSTracker extends Service implements LocationListener{
                 // no network provider is enabled
             } else {
                 this.canGetLocation = true;
-                // First get location from Network Provider
+                // First get currentLocation from Network Provider
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     Log.d("Network", "Network");

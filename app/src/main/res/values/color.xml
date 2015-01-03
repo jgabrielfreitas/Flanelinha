@@ -3,7 +3,7 @@
     <color name="project_actionbar">#8E9AEB</color>
     <color name="dark_violet">#303F9F</color>
     <color name="stone_title_activity">#072240</color>
-    <color name="stone_background">#efefef</color>
+    <color name="project_background">#efefef</color>
     <color name="stone_text_primary">#212121</color>
     <color name="text_secundary">#727272</color>
     <color name="text_subtext">#999999</color>
@@ -13,5 +13,5 @@
     <color name="light_blue">#2B80AC</color>
     <color name="dark_light_blue">#256D92</color>
     <color name="dark_gray">#7F7F7F</color>
-    <color name="note_gray_background">#A1ACB2</color>
+    <color name="note_gray_background">#CBCBCB</color>
 </resources>

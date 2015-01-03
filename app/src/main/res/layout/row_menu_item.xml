@@ -11,7 +11,7 @@
         android:id="@+id/item_image_view" />
 
     <TextView
-        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:layout_marginLeft="@dimen/half_default_margin_between_views"
         android:layout_marginTop="13dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="13dp"
         android:text="Esta opção faz blablabla"
         android:textColor="@color/text_secundary"
         android:id="@+id/item_sub_title"

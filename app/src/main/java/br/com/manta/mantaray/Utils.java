@@ -3,9 +3,8 @@ package br.com.manta.mantaray;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
+import android.os.Vibrator;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -19,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
-import br.com.manta.activity.CheckinActivity;
 import br.com.manta.informations.LocationXml;
 import br.com.manta.services.GPSTracker;
 
@@ -29,7 +27,7 @@ import br.com.manta.services.GPSTracker;
 public class Utils {
 
     public static final String CACHE_LAST_CHECKIN = "LAST_CHECKIN.xml";
-    public static String PACKAGE_NAME;
+    public static       String PACKAGE_NAME;
 
     // create cache with name and content
     public static void createCache(final String nameCache, final String toSave, final Context context, final String classRequest) {
@@ -54,7 +52,7 @@ public class Utils {
         }.start();
     }
 
-    // Create a fake location for tests
+    // Create a fake currentLocation for tests
     public static Location createFakeLocation() {
         Location fakeLocation = new Location("flp");
         fakeLocation.setLatitude(-22.93755403);
@@ -63,30 +61,8 @@ public class Utils {
         return fakeLocation;
     }
 
-    // method to close keyboard
-    public static void hideKeyboard(final Activity activity) {
-        Thread thread = new Thread() {
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                View view = activity.getCurrentFocus();
-                if (view == null)
-                    return;
-
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-
-            ;
-        };
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-        }
-    }
-
     // return coordinates from the last check-in
-    public static LocationXml getInformationsAboutLastLocation(Context context) {
+    public static LocationXml getInformationsAboutLastLocationFromCache(Context context) {
 
         if (justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
 
@@ -137,13 +113,15 @@ public class Utils {
     }
 
     // save cache with current coordinates
-    public static void createCheckin(Location location, Activity activity){
+    public static void createCheckin(String name, String details, Location location, Activity activity){
 
         try {
 
             LocationXml lastLocation = new LocationXml();
             lastLocation.latitude  = location.getLatitude();
             lastLocation.longitude = location.getLongitude();
+            lastLocation.name      = name;
+            lastLocation.address   = details;
 
             XStream xstream = new XStream(new DomDriver());
             xstream.processAnnotations(new Class[] { LocationXml.class });
@@ -158,22 +136,20 @@ public class Utils {
 
     }
 
-    // return current location
+    // return current currentLocation
     public static Location getClientLocation(Context context){
 
         Location currentLocation = new Location("dummyprovider");
 
         GPSTracker gps = new GPSTracker(context);
-        if(gps.canGetLocation()) { // gps enabled | return boolean
-            currentLocation.setLatitude(gps.getLatitude());
-            currentLocation.setLongitude(gps.getLongitude());
-        }
+        if(gps.canGetLocation())  // gps enabled | return boolean
+            currentLocation = gps.getLocation();
 
         return currentLocation;
 
     }
 
-    public static void markLastLocationInGoogleMap(Activity activity, boolean debug) {
+    public static void markLastLocationInGoogleMap(LatLng latLng, Activity activity, boolean debug) {
 
         if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
             return;
@@ -183,15 +159,20 @@ public class Utils {
 
             Location testLocation = Utils.createFakeLocation();   // for tests... [FAKE LOCATION]
             latLngDebug = new LatLng(testLocation.getLatitude(), testLocation.getLongitude());
-            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the location
+            latLng = latLngDebug; // mark in map the currentLocation
             Log.i("Checkin","the last coordinates were recovered");
         } else {
 
-            LocationXml testLocation = Utils.getInformationsAboutLastLocation(activity); // get coordinates from last check-in
+            LocationXml testLocation = Utils.getInformationsAboutLastLocationFromCache(activity); // get coordinates from last check-in
             latLngDebug = new LatLng(testLocation.latitude, testLocation.longitude);
-            CheckinActivity.lastCoordinates = latLngDebug; // mark in map the location
+            latLng = latLngDebug; // mark in map the currentLocation
             Log.i("Checkin","the last coordinates were recovered");
         }
+    }
+
+    public static void vibrateFeedback(Context context){
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(250);
     }
 
 }

@@ -5,14 +5,19 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_checkin">Realizar Check-in</string>
-
     <string name="note">
-        <![CDATA[
+<![CDATA[
             <b>NOTA:</b> Toque no mapa para mais detalhes.
         ]]>
     </string>
-    <string name="finish_checkin">Finalizar check-in</string>
+    <string name="finish_checkin">FINALIZAR CHECK-IN</string>
     <string name="local_name">Nome do local:</string>
     <string name="details_local">Detalhes do local:</string>
+    <string name="optional_field">(Campo opcional)</string>
+    <string name="optional_field_plus">(Campo opcional)\nEx: Em frente à padaria</string>
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="title_activity_find_car">Busca</string>
+    <string name="title_activity_details_map">Detalhes</string>
 
 </resources>

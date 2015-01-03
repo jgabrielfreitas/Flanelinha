@@ -1,7 +1,7 @@
 package br.com.manta.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -27,6 +28,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     List<MenuItem> optionsArray = new ArrayList<>();
     ListView       listViewMenu;
     ItemAdapter    adapter;
+    LocationManager locationManager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
     private void instanceViews() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         listViewMenu = (ListView) findViewById(R.id.mainActivityMenuListView);
 
@@ -58,16 +61,22 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        switch (position){
+        switch (position) {
 
             case 0:
                 doIntent(CheckinActivity.class);
                 break;
             case 1:
+                if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
+                    Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
+                FindCarActivity.cacheLocation = Utils.getInformationsAboutLastLocationFromCache(getApplicationContext()); // from cache
+                FindCarActivity.currentLocation = Utils.getClientLocation(getApplicationContext()); // current currentLocation
+                doIntent(FindCarActivity.class);
                 break;
             case 2:
-
                 break;
         }
     }
@@ -75,11 +84,17 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
 
-        Utils.markLastLocationInGoogleMap(this, false); // params: this activity, not fake location
-        CheckinActivity.location = Utils.getClientLocation(getApplicationContext()); // get GPS location and set location into map
+//        CheckinActivity.currentLocation = Utils.getClientLocation(getApplicationContext()); // get GPS currentLocation and set currentLocation into map
+        CheckinActivity.location = testLocation();
         Log.i("Location","current location was successfully captured");
 
+    }
 
+    public Location testLocation() {
 
+        String provider = locationManager.NETWORK_PROVIDER;
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        return location;
     }
 }
