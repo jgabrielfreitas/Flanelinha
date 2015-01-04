@@ -4,6 +4,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,20 +19,46 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.R;
+import br.com.manta.mantaray.Utils;
 import br.com.manta.route.Route;
 import br.com.manta.route.Routing;
 import br.com.manta.route.RoutingListener;
 
-public class FindCarActivity extends ActionBarActivity implements RoutingListener {
+public class FindCarActivity extends ActionBarActivity implements RoutingListener, View.OnClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     public static LocationXml cacheLocation; // checkin currentLocation
     public static Location  currentLocation; // currentLocation
 
+    TextView nameLocationTextView;
+    TextView detailsLocationTextView;
+    Button   carFoundButton;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_car);
+        instanceViews();
         setUpMapIfNeeded();
+    }
+
+    private void instanceViews() {
+
+        nameLocationTextView    = (TextView) findViewById(R.id.detailsLocationTextView);
+        detailsLocationTextView = (TextView) findViewById(R.id.detailsLocationTextView);
+        carFoundButton          = (Button)   findViewById(R.id.carFoundButton);
+
+        if(cacheLocation.name != null && !cacheLocation.name.isEmpty())
+            nameLocationTextView.setText("Local :\n" + cacheLocation.name);
+        else
+            nameLocationTextView.setText("Local :\nNão informado.");
+
+        if(cacheLocation.address != null && !cacheLocation.address.isEmpty())
+            detailsLocationTextView.setText("Detalhes :\n" + cacheLocation.address);
+        else
+            nameLocationTextView.setText("Detalhes :\nNão informado.");
+
+        carFoundButton.setOnClickListener(this);
+
     }
 
 
@@ -83,5 +113,13 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
         polyoptions.width(15);
         polyoptions.addAll(mPolyOptions.getPoints());
         googleMap.addPolyline(polyoptions);
+    }
+
+    public void onClick(View v) {
+
+        Utils.vibrateFeedback(this);
+        Toast.makeText(this, "Concluído.", Toast.LENGTH_LONG).show();
+        Utils.deleteCache(Utils.CACHE_LAST_CHECKIN);
+        this.finish();
     }
 }

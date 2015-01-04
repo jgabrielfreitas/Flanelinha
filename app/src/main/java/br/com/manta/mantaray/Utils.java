@@ -149,6 +149,7 @@ public class Utils {
 
     }
 
+    // not used
     public static void markLastLocationInGoogleMap(LatLng latLng, Activity activity, boolean debug) {
 
         if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
@@ -170,10 +171,19 @@ public class Utils {
         }
     }
 
+    // just shake device
     public static void vibrateFeedback(Context context){
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(250);
+        v.vibrate(100);
     }
 
+    // delete cache
+    public static void deleteCache(String cache){
+
+        if(justCheckFileCache(cache)) {
+            File fileCache = new File("/data/data/"+ PACKAGE_NAME +"/files/" + cache);
+            fileCache.delete();
+        }
+    }
 }
 

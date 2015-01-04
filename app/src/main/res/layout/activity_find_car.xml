@@ -1,5 +1,83 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:id="@+id/map"
-    tools:context="br.com.manta.activity.FindCarActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context="br.com.manta.activity.FindCarActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/gradient"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin_between_views"
+            android:layout_marginRight="@dimen/default_margin_between_views"
+            android:layout_marginLeft="@dimen/default_margin_between_views"
+            android:text="Achei meu carro"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColor="#fff"
+            android:id="@+id/carFoundButton"
+            android:background="@drawable/button_card_selector"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:paddingBottom="@dimen/half_default_margin_between_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Detalhes do local:\nPerto da padaria"
+            android:id="@+id/detailsLocationTextView"
+            android:layout_above="@+id/carFoundButton"
+            android:layout_alignLeft="@+id/carFoundButton"
+            android:layout_alignStart="@+id/carFoundButton"
+            android:layout_alignRight="@+id/carFoundButton"
+            android:layout_alignEnd="@+id/carFoundButton"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:textStyle="bold"
+            android:textColor="#fff" />
+
+        <TextView
+            android:paddingBottom="@dimen/half_default_margin_between_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Nome do local:\nMinha casa"
+            android:id="@+id/nameLocationTextView"
+            android:layout_above="@+id/detailsLocationTextView"
+            android:layout_alignLeft="@+id/detailsLocationTextView"
+            android:layout_alignStart="@+id/detailsLocationTextView"
+            android:layout_alignRight="@+id/detailsLocationTextView"
+            android:layout_alignEnd="@+id/detailsLocationTextView"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:textStyle="bold"
+            android:textColor="#fff" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
