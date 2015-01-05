@@ -12,13 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.manta.adapter.ItemAdapter;
-import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.MenuItem;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
@@ -77,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 doIntent(FindCarActivity.class);
                 break;
             case 2:
-
+                doIntent(AboutApplicationActivity.class);
                 break;
         }
     }

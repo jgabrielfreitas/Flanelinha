@@ -5,7 +5,7 @@
     android:layout_marginRight="@dimen/half_default_margin_between_views"
     android:layout_marginTop="@dimen/half_default_margin_between_views"
     android:layout_marginBottom="@dimen/half_default_margin_between_views"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true" >
 
 
     <ScrollView
