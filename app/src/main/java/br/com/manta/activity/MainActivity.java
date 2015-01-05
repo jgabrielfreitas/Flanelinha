@@ -77,6 +77,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 doIntent(FindCarActivity.class);
                 break;
             case 2:
+
                 break;
         }
     }
