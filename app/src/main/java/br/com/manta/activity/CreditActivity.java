@@ -1,8 +1,6 @@
 package br.com.manta.activity;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -20,12 +18,7 @@ public class CreditActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
 
-        if(getActionBar() != null) {
-            getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2E64B6")));
-        }
-
         instanceViews();
-
     }
 
     private void instanceViews() {
