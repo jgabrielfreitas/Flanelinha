@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.manta.mantaray"
     android:versionCode="1"
-    android:versionName="1.1.0" >
+    android:versionName="1.1.0">
 
     <uses-sdk
         android:maxSdkVersion="21"
@@ -22,10 +22,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_flanelinha_144"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="br.com.manta.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +44,7 @@
             android:name="br.com.manta.activity.CheckinActivity"
             android:label="@string/title_activity_checkin"
             android:parentActivityName="br.com.manta.activity.MainActivity"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
@@ -58,7 +58,7 @@
         <activity
             android:name="br.com.manta.activity.FindCarActivity"
             android:label="@string/title_activity_find_car"
-            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            android:parentActivityName="br.com.manta.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
@@ -66,13 +66,13 @@
         <activity
             android:name="br.com.manta.activity.DetailsMapActivity"
             android:label="@string/title_activity_details_map"
-            android:parentActivityName="br.com.manta.activity.CheckinActivity" >
+            android:parentActivityName="br.com.manta.activity.CheckinActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.CheckinActivity" />
         </activity>
 
-        <receiver android:name="br.com.manta.widget.QuickCheckInWidget" >
+        <receiver android:name="br.com.manta.widget.QuickCheckInWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -85,7 +85,7 @@
         <activity
             android:name="br.com.manta.activity.AboutApplicationActivity"
             android:label="@string/title_activity_about_application"
-            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            android:parentActivityName="br.com.manta.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
@@ -93,8 +93,7 @@
         <activity
             android:name="br.com.manta.activity.CreditActivity"
             android:label="@string/title_activity_credit"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog">
-        </activity>
+            android:theme="@android:style/Theme.Holo.Dialog" />
     </application>
 
 </manifest>

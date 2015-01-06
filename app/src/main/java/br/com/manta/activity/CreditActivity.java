@@ -1,17 +1,15 @@
 package br.com.manta.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import br.com.manta.mantaray.R;
 
-public class CreditActivity extends ActionBarActivity {
+public class CreditActivity extends Activity {
 
     TextView creditInformationsTextView;
 
@@ -19,7 +17,12 @@ public class CreditActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
 
+        if(getActionBar() != null) {
+            getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2E64B6")));
+        }
+
         instanceViews();
+
     }
 
     private void instanceViews() {

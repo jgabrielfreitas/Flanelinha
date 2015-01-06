@@ -31,9 +31,10 @@
     <string name="credits" formatted="false">
         <![CDATA[
                 <b>Design/Código</b><br> João Gabriel (@jgabrielfreitas)<br>
-                <a href="https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts">+ João Gabriel de Freitas</a>
+                <a href="https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts">+ João Gabriel de Freitas</a><br><br>
             ]]>
     </string>
+    <string name="close">Fechar</string>
 
 
 </resources>
