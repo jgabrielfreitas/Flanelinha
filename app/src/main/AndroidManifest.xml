@@ -94,6 +94,7 @@
             android:name="br.com.manta.activity.CreditActivity"
             android:label="@string/title_activity_credit"
             android:theme="@android:style/Theme.Holo.Dialog" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="4044ad4aa81e6189918b0d0bd8aac3ab88a77821"/>
     </application>
 
 </manifest>

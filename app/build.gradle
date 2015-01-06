@@ -1,6 +1,29 @@
+buildscript {
+    repositories {
+        maven { url 'http://download.crashlytics.com/maven' }
+    }
+
+    dependencies {
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'crashlytics'
+
+repositories {
+    maven { url 'http://download.crashlytics.com/maven' }
+}
+
 
 android {
+    signingConfigs {
+        JGabrielFreitas {
+            keyAlias 'jgabrielfreitas'
+            keyPassword 'jgaf1234'
+            storeFile file('C:/João/JGabrielFreitas')
+            storePassword 'jgaf1234'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
@@ -9,6 +32,7 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName 'beta1'
+        signingConfig signingConfigs.JGabrielFreitas
     }
     buildTypes {
         release {
@@ -27,9 +51,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/xstream-1.4.7.jar')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.crashlytics.android:crashlytics:1.+'
 }
