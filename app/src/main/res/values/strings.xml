@@ -30,8 +30,9 @@
     <string name="credit_details">Detalhes</string>
     <string name="credits" formatted="false">
         <![CDATA[
-                <b>Design/Código</b><br> João Gabriel (@jgabrielfreitas)<br>
-                <a href="https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts">+ João Gabriel de Freitas</a><br><br>
+                <b>• Design/Colaboração</b><br> João Gabriel (@jgabrielfreitas)<br><br>
+
+                <b>• Google-Directions-Android</b><br>jd-alexander, ksarmalkar, licryle and<br>bitdeli-chef<br>
             ]]>
     </string>
     <string name="close">Fechar</string>

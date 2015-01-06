@@ -10,7 +10,7 @@
         android:text="@string/hello_world"
         android:textColor="@color/stone_title_activity"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <Button
         android:layout_width="wrap_content"
