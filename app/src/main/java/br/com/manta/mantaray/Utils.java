@@ -2,9 +2,14 @@ package br.com.manta.mantaray;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Vibrator;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.*;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -27,6 +32,7 @@ import br.com.manta.services.GPSTracker;
 public class Utils {
 
     public static final String CACHE_LAST_CHECKIN = "LAST_CHECKIN.xml";
+    public static final String URL_IN_GITHUB = "https://github.com/jgabrielfreitas/Flanelinha";
     public static       String PACKAGE_NAME;
 
     // create cache with name and content
@@ -185,5 +191,7 @@ public class Utils {
             fileCache.delete();
         }
     }
+
+
 }
 

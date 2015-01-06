@@ -1,6 +1,8 @@
 package br.com.manta.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -22,9 +24,9 @@ import br.com.manta.mantaray.Utils;
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
-    List<MenuItem> optionsArray = new ArrayList<>();
-    ListView       listViewMenu;
-    ItemAdapter    adapter;
+    List<MenuItem>  optionsArray = new ArrayList<>();
+    ListView        listViewMenu;
+    ItemAdapter     adapter;
     LocationManager locationManager;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         switch (position) {
 
             case 0:
-                doIntent(CheckinActivity.class);
+                if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
+                    doIntent(CheckinActivity.class);
+                else
+                    createAlertDialog();
                 break;
             case 1:
                 if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
@@ -83,16 +88,36 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         super.onResume();
 
 //        CheckinActivity.currentLocation = Utils.getClientLocation(getApplicationContext()); // get GPS currentLocation and set currentLocation into map
-        CheckinActivity.location = testLocation();
+        CheckinActivity.location = getLocation();
         Log.i("Location","current location was successfully captured");
 
     }
 
-    public Location testLocation() {
+    public Location getLocation() {
 
         String provider = locationManager.NETWORK_PROVIDER;
         Location location = locationManager.getLastKnownLocation(provider);
 
         return location;
+    }
+
+
+    private void createAlertDialog() {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.warning_checkin))
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Utils.deleteCache(Utils.CACHE_LAST_CHECKIN); // delete old cache
+                        doIntent(CheckinActivity.class); // set user to do a new check-in
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
+
     }
 }

@@ -43,7 +43,12 @@
         <activity
             android:name="br.com.manta.activity.CheckinActivity"
             android:label="@string/title_activity_checkin"
-            android:windowSoftInputMode="stateHidden" />
+            android:parentActivityName="br.com.manta.activity.MainActivity"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.manta.activity.MainActivity" />
+        </activity>
 
         <service
             android:name="br.com.manta.services.GPSTracker"
@@ -52,10 +57,20 @@
 
         <activity
             android:name="br.com.manta.activity.FindCarActivity"
-            android:label="@string/title_activity_find_car" />
+            android:label="@string/title_activity_find_car"
+            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.manta.activity.MainActivity" />
+        </activity>
         <activity
-            android:name="br.com.manta.activity.DetailsMap"
-            android:label="@string/title_activity_details_map" />
+            android:name="br.com.manta.activity.DetailsMapActivity"
+            android:label="@string/title_activity_details_map"
+            android:parentActivityName="br.com.manta.activity.CheckinActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.manta.activity.CheckinActivity" />
+        </activity>
 
         <receiver android:name="br.com.manta.widget.QuickCheckInWidget" >
             <intent-filter>
@@ -69,7 +84,16 @@
 
         <activity
             android:name="br.com.manta.activity.AboutApplicationActivity"
-            android:label="@string/title_activity_about_application" >
+            android:label="@string/title_activity_about_application"
+            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.manta.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name="br.com.manta.activity.CreditActivity"
+            android:label="@string/title_activity_credit"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog">
         </activity>
     </application>
 

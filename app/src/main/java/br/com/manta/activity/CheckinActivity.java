@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.MenuItem;
@@ -39,13 +40,29 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         setContentView(R.layout.activity_checkin);
         setUpMapIfNeeded();
         instanceViews();
+
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                                    // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -101,8 +118,8 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     }
 
     public void onMapClick(LatLng latLng) {
-        Intent intent = new Intent(this, DetailsMap.class);
-        DetailsMap.currentLocation = location;
+        Intent intent = new Intent(this, DetailsMapActivity.class);
+        DetailsMapActivity.currentLocation = location;
         startActivity(intent);
     }
 

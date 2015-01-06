@@ -6,9 +6,9 @@
     <string name="action_settings">Sobre</string>
     <string name="title_activity_checkin">Realizar Check-in</string>
     <string name="note">
-<![CDATA[
+        <![CDATA[
             <b>NOTA:</b> Toque no mapa para mais detalhes.
-        ]]>
+             ]]>
     </string>
     <string name="finish_checkin">FINALIZAR CHECK-IN</string>
     <string name="local_name">Nome do local:</string>
@@ -21,5 +21,19 @@
     <string name="title_activity_details_map">Detalhes</string>
     <string name="add_widget">Add widget</string>
     <string name="quick_checkin">Check-in rápido!</string>
+    <string name="open_source">Open source</string>
+    <string name="open_in_github">Abrir no github</string>
+    <string name="application_version">Versão do aplicativo</string>
+    <string name="warning_checkin">Você possui um check-in realizado anteriormente.\n\nDeseja excluí-lo e realizar um novo?</string>
+    <string name="warning">Aviso</string>
+    <string name="title_activity_credit">Créditos</string>
+    <string name="credit_details">Detalhes</string>
+    <string name="credits" formatted="false">
+        <![CDATA[
+                <b>Design/Código</b><br> João Gabriel (@jgabrielfreitas)<br>
+                <a href="https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts">+ João Gabriel de Freitas</a>
+            ]]>
+    </string>
+
 
 </resources>

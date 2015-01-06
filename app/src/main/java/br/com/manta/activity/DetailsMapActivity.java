@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import br.com.manta.mantaray.R;
 
-public class DetailsMap extends ActionBarActivity {
+public class DetailsMapActivity extends ActionBarActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 

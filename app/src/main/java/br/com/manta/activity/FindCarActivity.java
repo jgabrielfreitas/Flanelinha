@@ -47,12 +47,12 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
         detailsLocationTextView = (TextView) findViewById(R.id.detailsLocationTextView);
         carFoundButton          = (Button)   findViewById(R.id.carFoundButton);
 
-        if(cacheLocation.name != null)
+        if(cacheLocation.name != null && !cacheLocation.name.isEmpty())
             nameLocationTextView.setText("Local :\n" + cacheLocation.name);
         else
             nameLocationTextView.setText("Local :\nNão informado.");
 
-        if(cacheLocation.address != null)
+        if(cacheLocation.address != null && !cacheLocation.address.isEmpty())
             detailsLocationTextView.setText("Detalhes :\n" + cacheLocation.address);
         else
             detailsLocationTextView.setText("Detalhes :\nNão informado.");

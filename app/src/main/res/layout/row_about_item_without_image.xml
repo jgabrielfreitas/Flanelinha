@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <TextView
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/application_version"
+        android:textColor="@color/dark_light_blue"
+        android:textStyle="bold"
+        android:id="@+id/about_without_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v1.0.1"
+        android:textSize="13dp"
+        android:textColor="@color/text_secundary"
+        android:id="@+id/about_without_sub_title"
+        android:layout_below="@+id/about_without_title"
+        android:layout_alignLeft="@+id/about_without_title"
+        android:layout_alignStart="@+id/about_without_title" />
+</RelativeLayout>

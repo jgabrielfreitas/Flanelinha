@@ -46,7 +46,7 @@ public class ItemAdapter extends BaseAdapter {
         View view = layoutInflater.inflate(R.layout.row_menu_item, parent, false);
 
         ImageView image    = (ImageView) view.findViewById(R.id.item_image_view);
-        TextView title     = (TextView)  view.findViewById(R.id.item_title);
+        TextView  title    = (TextView)  view.findViewById(R.id.item_title);
         TextView  subtitle = (TextView)  view.findViewById(R.id.item_sub_title);
 
         image.setImageDrawable(item.getImage());

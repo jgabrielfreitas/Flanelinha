@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+
+    <ImageView
+        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/git_icon"
+        android:id="@+id/about_image_view" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/half_default_margin_between_views"
+        android:layout_marginTop="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/open_source"
+        android:id="@+id/about_title"
+        android:textColor="@color/dark_light_blue"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/about_image_view"
+        android:layout_toEndOf="@+id/about_image_view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:text="@string/open_in_github"
+        android:textColor="@color/text_secundary"
+        android:id="@+id/about_sub_title"
+        android:layout_below="@+id/about_title"
+        android:layout_alignLeft="@+id/about_title"
+        android:layout_alignStart="@+id/about_title" />
+
+
+</RelativeLayout>
