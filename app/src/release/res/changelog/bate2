@@ -3,4 +3,8 @@
 beta2 - changelog
 =================
 
+beta1 -> beta2
 * String in CheckinActivity
+* Changes in the method onMapClick and add onMapLongClick [now the user can change location]
+* Now, user can drag the Marker to change his location in map and save cache
+* TODO [GPS validations]

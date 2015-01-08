@@ -119,13 +119,13 @@ public class Utils {
     }
 
     // save cache with current coordinates
-    public static void createCheckin(String name, String details, Location location, Activity activity){
+    public static void createCheckin(String name, String details, LatLng location, Activity activity){
 
         try {
 
             LocationXml lastLocation = new LocationXml();
-            lastLocation.latitude  = location.getLatitude();
-            lastLocation.longitude = location.getLongitude();
+            lastLocation.latitude  = location.latitude;
+            lastLocation.longitude = location.longitude;
             lastLocation.name      = name;
             lastLocation.address   = details;
 

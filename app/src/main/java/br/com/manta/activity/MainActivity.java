@@ -89,15 +89,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
 
-//        CheckinActivity.currentLocation = Utils.getClientLocation(getApplicationContext()); // get GPS currentLocation and set currentLocation into map
         CheckinActivity.location = getLocation();
         Log.i("Location","current location was successfully captured");
-
     }
 
     public Location getLocation() {
 
-        String provider = locationManager.NETWORK_PROVIDER;
+        String provider   = locationManager.NETWORK_PROVIDER;
         Location location = locationManager.getLastKnownLocation(provider);
 
         return location;

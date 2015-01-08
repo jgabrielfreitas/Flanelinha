@@ -32,7 +32,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName 'beta1.1'
+        versionName 'beta2'
         signingConfig signingConfigs.JGabrielFreitas
     }
     buildTypes {

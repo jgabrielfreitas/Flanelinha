@@ -7,8 +7,9 @@
     <string name="title_activity_checkin">Realizar Check-in</string>
     <string name="note">
         <![CDATA[
-            <b>NOTA:</b> <i> Segure no mapa para detalhes.</i>
-             ]]>
+
+            <i><b>NOTA:</b> Segure no mapa para detalhes.</i>
+         ]]>
     </string>x
     <string name="finish_checkin">FINALIZAR CHECK-IN</string>
     <string name="local_name">Nome do local:</string>
