@@ -33,4 +33,5 @@ public class CreditActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         finish();
     }
+
 }
