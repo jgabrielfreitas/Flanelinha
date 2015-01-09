@@ -7,4 +7,9 @@ beta1 -> beta2
 * String in CheckinActivity
 * Changes in the method onMapClick and add onMapLongClick [now the user can change location]
 * Now, user can drag the Marker to change his location in map and save cache
+* Created animation in Map  [CheckinActivity]
+* Deleted DetailsActivity   [reason: duplicate code]
+* Dynamic 'NOTE' textview   [CheckinActivity]
+* Dynamic animations in map [CheckinActivity]
+* Add res/anim fade_in and fade_out
 * TODO [GPS validations]

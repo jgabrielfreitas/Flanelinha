@@ -5,12 +5,18 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Sobre</string>
     <string name="title_activity_checkin">Realizar Check-in</string>
-    <string name="note">
+    <string name="note_not_expanded">
         <![CDATA[
 
-            <i><b>NOTA:</b> Segure no mapa para detalhes.</i>
+            <i><b>NOTA:</b> Segure no mapa para expandi-lo.</i>
          ]]>
-    </string>x
+    </string>
+    <string name="note_expanded">
+        <![CDATA[
+
+            <i><b>NOTA:</b> Segure no mapa para reduzi-lo.</i>
+         ]]>
+    </string>
     <string name="finish_checkin">FINALIZAR CHECK-IN</string>
     <string name="local_name">Nome do local:</string>
     <string name="details_local">Detalhes do local:</string>

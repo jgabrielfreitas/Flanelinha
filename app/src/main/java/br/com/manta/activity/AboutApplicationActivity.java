@@ -63,11 +63,8 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is NOT part of this app's task, so create a new task
                     // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this)
-                            // Add all of this activity's parents to the back stack
-                            .addNextIntentWithParentStack(upIntent)
-                                    // Navigate up to the closest parent
-                            .startActivities();
+                    TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent) // Add all of this activity's parents to the back stack
+                                                 .startActivities();// Navigate up to the closest parent
                 } else {
                     // This activity is part of this app's task, so simply
                     // navigate up to the logical parent activity.

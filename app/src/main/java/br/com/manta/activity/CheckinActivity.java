@@ -1,16 +1,22 @@
 package br.com.manta.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +27,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import br.com.manta.mantaray.CustomScrollView;
 import br.com.manta.mantaray.R;
+import br.com.manta.mantaray.ResizeAnimation;
 import br.com.manta.mantaray.Utils;
 
 public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener,
@@ -30,14 +38,16 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private Button    checkinButton;
     private TextView  noteTextView;
+    private SupportMapFragment supportMapFragment;
+    private CustomScrollView   checkinScrollView;
     EditText localNameEditText;
     EditText detailsLocalEditText;
-    MarkerOptions markerOptions;
+    LatLng currentPosition;
     Marker marker;
-
-    private String titleMarker = "Você está aqui!";
-    private String titleNewMarker = "Local escolhido";
-
+    MarkerOptions markerOptions;
+    private boolean mMapViewExpanded = false;
+    private String  titleMarker      = "Você está aqui!";
+    private String  titleNewMarker   = "Local escolhido";
     public static Location location;  // user location
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +86,13 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private void instanceViews() {
         noteTextView  = (TextView) findViewById(R.id.noteTextView);
         checkinButton = (Button) findViewById(R.id.checkinButton);
+        checkinScrollView = (CustomScrollView) findViewById(R.id.checkinScrollView);
+
 
         localNameEditText    = (EditText) findViewById(R.id.localNameEditText);
         detailsLocalEditText = (EditText) findViewById(R.id.detailsLocalEditText);
 
-        noteTextView.setText(Html.fromHtml(getString(R.string.note)));
+        noteTextView.setText(Html.fromHtml(getString(R.string.note_not_expanded)));
         checkinButton.setOnClickListener(this);
         googleMap.setOnMapClickListener(this);
         googleMap.setOnMapLongClickListener(this); // created in beta2
@@ -90,7 +102,8 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         // Do a null check to confirm that we have not already instantiated the map.
         if (googleMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+            supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            googleMap = supportMapFragment.getMap();
             // Check if we were successful in obtaining the map.
             if (googleMap != null)
                 setUpMap();
@@ -99,10 +112,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void setUpMap() {
 
-        //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
-        //googleMap.setMyLocationEnabled(true);
-
-        LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+        currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 
         markerOptions = new MarkerOptions();
         markerOptions.position(currentPosition).title(titleMarker).draggable(true);
@@ -110,8 +120,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
-
+        zoomInCurrentLocation();
     }
 
     protected void onResume() {
@@ -138,12 +147,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     public void onMapClick(LatLng latLng) {
 
-        /*
-        * TODO [event on touch map]
-        * create a marker on user touch to indicate current position
-        * AND start map with GPS position, not the float blue indicator
-        * */
-
         // Creating a marker
         markerOptions = new MarkerOptions();
 
@@ -167,21 +170,59 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
-
      }
 
     public void onMapLongClick(LatLng latLng) {
-        // changed in beta2
-        DetailsMapActivity.currentLatLng = markerOptions.getPosition();
-        Intent intent = new Intent(this, DetailsMapActivity.class);
-        startActivity(intent);
-        googleMap.clear();
+
+        Utils.vibrateFeedback(this);
+        animateMapView();
     }
 
-    protected void onStop() {
-        super.onStop();
+    private void animateMapView() {
 
-        // to force recreate the map
-        googleMap = null;
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) supportMapFragment.getView().getLayoutParams();
+
+        ResizeAnimation a = new ResizeAnimation(supportMapFragment.getView());
+        a.setDuration(250);
+
+        if (!getMapViewStatus()) {
+            mMapViewExpanded = true;
+            a.setParams(lp.height, dpToPx(getResources(), 400));
+            checkinScrollView.setEnableScrolling(false);
+            changeTextNote(Html.fromHtml(getString(R.string.note_expanded)));
+            zoomInCurrentLocation();
+        } else {
+            checkinScrollView.setEnableScrolling(true);
+            mMapViewExpanded = false;
+            a.setParams(lp.height, dpToPx(getResources(), 150));
+            changeTextNote(Html.fromHtml(getString(R.string.note_not_expanded)));
+            zoomInCurrentLocation();
+        }
+        supportMapFragment.getView().startAnimation(a);
+    }
+
+    private boolean getMapViewStatus() {
+        return mMapViewExpanded;
+    }
+
+    public int dpToPx(Resources res, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+    }
+
+    private void changeTextNote(Spanned note){
+        noteTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+        noteTextView.setText(note);
+        noteTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+    }
+
+    private void zoomInCurrentLocation(){
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+    }
+
+    public void onBackPressed() {
+        if (mMapViewExpanded)
+            animateMapView();
+        else
+            super.onBackPressed();
     }
 }
