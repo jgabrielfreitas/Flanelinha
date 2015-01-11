@@ -4,7 +4,7 @@
     android:layout_marginLeft="@dimen/half_default_margin_between_views"
     android:layout_marginRight="@dimen/half_default_margin_between_views"
     android:layout_marginTop="@dimen/half_default_margin_between_views"
-    android:layout_marginBottom="@dimen/half_default_margin_between_views" >
+    android:layout_marginBottom="@dimen/half_default_margin_between_views">
 
 
     <br.com.manta.mantaray.CustomScrollView
@@ -16,13 +16,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:fillViewport="false">
+        android:layout_alignParentEnd="true">
 
         <RelativeLayout
             android:id="@+id/relativeLayoutInScroll"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:animateLayoutChanges="true">
 
             <fragment
@@ -39,13 +38,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/note_card"
-                android:id="@+id/relativeLayout"
+                android:id="@+id/relativeLayoutNote"
                 android:layout_below="@+id/map"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" >
+                android:layout_alignParentStart="true">
 
                 <TextView
-                    android:layout_marginLeft="@dimen/default_margin_between_views"
+                    android:paddingLeft="@dimen/default_margin_between_views"
+                    android:paddingRight="@dimen/default_margin_between_views"
                     android:id="@+id/noteTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                     android:layout_alignParentStart="true"
                     android:paddingTop="10dp"
                     android:text="@string/note_not_expanded"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp" />
             </RelativeLayout>
 
             <TextView
@@ -67,7 +67,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/local_name"
                 android:id="@+id/textView"
-                android:layout_below="@+id/relativeLayout"
+                android:layout_below="@+id/relativeLayoutNote"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
@@ -112,7 +112,7 @@
                 android:layout_alignParentStart="true" />
 
             <Button
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="@color/project_background"
                 android:layout_marginTop="@dimen/default_margin_between_views"

@@ -1,10 +1,13 @@
 package br.com.manta.mantaray;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -34,6 +37,8 @@ public class Utils {
     public static final String CACHE_LAST_CHECKIN = "LAST_CHECKIN.xml";
     public static final String URL_IN_GITHUB = "https://github.com/jgabrielfreitas/Flanelinha";
     public static       String PACKAGE_NAME;
+
+    public static boolean isConnected = false;
 
     // create cache with name and content
     public static void createCache(final String nameCache, final String toSave, final Context context, final String classRequest) {
@@ -192,6 +197,75 @@ public class Utils {
         }
     }
 
+    // show AlertDialog to enabled GPS
+    public static void buildAlertMessageNoGps(final Activity activity) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Localização")
+                .setMessage("Ooops..Parece que o seu GPS está desligado, gostaria de ligar agora?")
+                .setCancelable(false)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        activity.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        activity.finish();
+                        Toast.makeText(activity.getApplicationContext(), "Desculpe, mas precisamos da sua localização", Toast.LENGTH_LONG).show();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    // do ping Google, (check internet)
+    public static void doPing() {
+        new Thread() {
+            public void run() {
+                super.run();
+                String str = "";
+                try {
+                    Process process = Runtime.getRuntime().exec("/system/bin/ping -c 3 -s 1 " + "www.google.com.br"); // ping 3 packages
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    int i;
+                    char[] buffer = new char[4096];
+                    StringBuffer output = new StringBuffer();
+                    while ((i = reader.read(buffer)) > 0)
+                        output.append(buffer, 0, i);
+                    reader.close();
+
+                    str = output.toString();
+                    Log.e("PING-ANDORID", "\n" + str);
+                    isConnected = true;
+                } catch (Exception e) {
+                    Log.e("PING-ANDORID", "Ping failed");
+                    e.printStackTrace();
+                    isConnected = false;
+                }
+            }
+        }.start();
+    }
+
+    // show AlertDialog to enabled GPS
+    public static void buildAlertMessageNoNetwork(final Activity activity) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Ooops.. ")
+                .setMessage("Parece que a sua internet não está funcionando, gostaria de ligar agora?")
+                .setCancelable(false)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        activity.finish();
+                        Toast.makeText(activity.getApplicationContext(), "Desculpe, mas precisamos da sua localização", Toast.LENGTH_LONG).show();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }
 

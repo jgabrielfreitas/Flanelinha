@@ -65,6 +65,14 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         switch (position) {
 
             case 0:
+                validateAndGetLocation();
+
+                if(CheckinActivity.location == null) {
+                    Toast.makeText(this, "Não foi possível obter a sua localização.\nVocê está com o GPS ligado?", Toast.LENGTH_LONG).show();
+                    validateAndGetLocation();
+                    return;
+                }
+
                 if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
                     doIntent(CheckinActivity.class);
                 else
@@ -88,17 +96,32 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     protected void onResume() {
         super.onResume();
+        validateAndGetLocation();
+    }
+
+    private void validateAndGetLocation() {
+
+        // check if GPS is enabled
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Utils.buildAlertMessageNoGps(this); // if disabled, create a dialog to enabled
+            return;
+        }
 
         CheckinActivity.location = getLocation();
         Log.i("Location","current location was successfully captured");
     }
 
-    public Location getLocation() {
+    public synchronized Location getLocation() {
 
-        String provider   = locationManager.NETWORK_PROVIDER;
-        Location location = locationManager.getLastKnownLocation(provider);
+        try {
 
-        return location;
+            String provider = locationManager.NETWORK_PROVIDER;
+            Location location = locationManager.getLastKnownLocation(provider);
+
+            return location;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

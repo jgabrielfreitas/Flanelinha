@@ -12,7 +12,7 @@ import android.text.Spanned;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +42,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private CustomScrollView   checkinScrollView;
     EditText localNameEditText;
     EditText detailsLocalEditText;
+    RelativeLayout relativeLayoutNote;
     LatLng currentPosition;
     Marker marker;
     MarkerOptions markerOptions;
@@ -49,6 +50,8 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private String  titleMarker      = "Você está aqui!";
     private String  titleNewMarker   = "Local escolhido";
     public static Location location;  // user location
+    Animation fadeIn;
+    Animation fadeOut;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        fadeIn  = AnimationUtils.loadAnimation(this, R.anim.fade_in);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,11 +74,8 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is NOT part of this app's task, so create a new task
                     // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this)
-                            // Add all of this activity's parents to the back stack
-                            .addNextIntentWithParentStack(upIntent)
-                                    // Navigate up to the closest parent
-                            .startActivities();
+                    TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent) // Add all of this activity's parents to the back stack
+                                                 .startActivities(); // Navigate up to the closest parent
                 } else {
                     // This activity is part of this app's task, so simply
                     // navigate up to the logical parent activity.
@@ -85,8 +88,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void instanceViews() {
         noteTextView  = (TextView) findViewById(R.id.noteTextView);
-        checkinButton = (Button) findViewById(R.id.checkinButton);
-        checkinScrollView = (CustomScrollView) findViewById(R.id.checkinScrollView);
+        checkinButton = (Button)   findViewById(R.id.checkinButton);
+        checkinScrollView  = (CustomScrollView) findViewById(R.id.checkinScrollView);
+        relativeLayoutNote = (RelativeLayout)   findViewById(R.id.relativeLayoutNote);
 
 
         localNameEditText    = (EditText) findViewById(R.id.localNameEditText);
@@ -95,7 +99,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         noteTextView.setText(Html.fromHtml(getString(R.string.note_not_expanded)));
         checkinButton.setOnClickListener(this);
         googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLongClickListener(this); // created in beta2
+        googleMap.setOnMapLongClickListener(this);
     }
 
     private void setUpMapIfNeeded() {
@@ -140,7 +144,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             Utils.createCheckin(name, details, markerOptions.getPosition(), this);
 
             Toast.makeText(this, "Seu check-in foi concluído com sucesso!",Toast.LENGTH_LONG).show();
-            this.finish();
+            finish();
         } else
             Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.",Toast.LENGTH_LONG).show();
     }
@@ -183,7 +187,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) supportMapFragment.getView().getLayoutParams();
 
         ResizeAnimation a = new ResizeAnimation(supportMapFragment.getView());
-        a.setDuration(250);
+        a.setDuration(500);
 
         if (!getMapViewStatus()) {
             mMapViewExpanded = true;
@@ -210,9 +214,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     }
 
     private void changeTextNote(Spanned note){
-        noteTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+        relativeLayoutNote.startAnimation(fadeOut);
+        noteTextView.startAnimation(fadeOut);
         noteTextView.setText(note);
-        noteTextView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        noteTextView.startAnimation(fadeIn);
+        relativeLayoutNote.startAnimation(fadeIn);
     }
 
     private void zoomInCurrentLocation(){

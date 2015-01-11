@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.manta.mantaray"
-    android:versionCode="1"
-    android:versionName="1.1.0">
-
-    <uses-sdk
-        android:maxSdkVersion="21"
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+    package="br.com.manta.mantaray">
 
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -63,14 +56,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
         </activity>
-        <activity
-            android:name="br.com.manta.activity.DetailsMapActivity"
-            android:label="@string/title_activity_details_map"
-            android:parentActivityName="br.com.manta.activity.CheckinActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.manta.activity.CheckinActivity" />
-        </activity>
 
         <receiver android:name="br.com.manta.widget.QuickCheckInWidget">
             <intent-filter>
@@ -94,7 +79,10 @@
             android:name="br.com.manta.activity.CreditActivity"
             android:label="@string/title_activity_credit"
             android:theme="@android:style/Theme.Holo.Dialog" />
-        <meta-data android:name="com.crashlytics.ApiKey" android:value="4044ad4aa81e6189918b0d0bd8aac3ab88a77821"/>
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="4044ad4aa81e6189918b0d0bd8aac3ab88a77821" />
     </application>
 
 </manifest>

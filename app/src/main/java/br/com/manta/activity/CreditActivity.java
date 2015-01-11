@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import br.com.manta.mantaray.R;
+import br.com.manta.mantaray.Utils;
 
 public class CreditActivity extends Activity implements View.OnClickListener{
 

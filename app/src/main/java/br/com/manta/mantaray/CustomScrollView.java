@@ -8,6 +8,7 @@ import android.widget.ScrollView;
 /**
  * Created by JGabrielFreitas on 09/01/15.
  */
+
 public class CustomScrollView extends ScrollView {
 
     private boolean enableScrolling = true;
@@ -33,18 +34,26 @@ public class CustomScrollView extends ScrollView {
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-
-        if (isEnableScrolling())
-            return super.onInterceptTouchEvent(ev);
-        else
+        // Don't do anything with intercepted touch events if
+        // we are not scrollable
+        if (!isEnableScrolling())
             return false;
+        else
+            return super.onInterceptTouchEvent(ev);
+
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
-        if (isEnableScrolling())
-            return super.onInterceptTouchEvent(ev);
-        else
-            return false;
+
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // if we can scroll pass the event to the superclass
+                if (isEnableScrolling()) return super.onTouchEvent(ev);
+                // only continue to handle the touch event if scrolling enabled
+                return false; // mScrollable is always false at this point
+            default:
+                return super.onTouchEvent(ev);
+        }
     }
 }
 

@@ -43,6 +43,7 @@
             ]]>
     </string>
     <string name="close">Fechar</string>
+    <string name="title_activity_about_application">Sobre</string>
 
 
 </resources>

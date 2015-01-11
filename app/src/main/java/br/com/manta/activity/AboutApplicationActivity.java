@@ -94,5 +94,4 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
 
         }
     }
-
 }

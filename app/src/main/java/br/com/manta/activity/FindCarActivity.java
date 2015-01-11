@@ -120,6 +120,6 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
         Utils.vibrateFeedback(this);
         Toast.makeText(this, "Concluído.", Toast.LENGTH_LONG).show();
         Utils.deleteCache(Utils.CACHE_LAST_CHECKIN);
-        this.finish();
+        finish();
     }
 }
