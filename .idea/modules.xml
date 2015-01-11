@@ -3,10 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Flanelinha.iml" filepath="$PROJECT_DIR$/Flanelinha.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Flanelinha.iml" filepath="$PROJECT_DIR$/Flanelinha.iml" />
       <module fileurl="file://$PROJECT_DIR$/Flanelinha_github.iml" filepath="$PROJECT_DIR$/Flanelinha_github.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/flanelinha_repo.iml" filepath="$PROJECT_DIR$/flanelinha_repo.iml" />
       <module fileurl="file://$PROJECT_DIR$/github_flanelinha.iml" filepath="$PROJECT_DIR$/github_flanelinha.iml" />
     </modules>
   </component>
