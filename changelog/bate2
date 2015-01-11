@@ -12,4 +12,6 @@ beta1 -> beta2
 * Dynamic 'NOTE' textview   [CheckinActivity]
 * Dynamic animations in map [CheckinActivity]
 * Add res/anim fade_in and fade_out
+* Add GPS validation
+* Add doPing() methos (but are not used yet)
 * TODO [GPS validations]
