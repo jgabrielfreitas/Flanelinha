@@ -1,38 +1,38 @@
 package br.com.manta.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.text.Html;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.v7.app.ActionBarActivity;
+import android.util.SparseArray;
+import android.widget.ExpandableListView;
 
+import br.com.manta.adapter.MyExpandableListAdapter;
+import br.com.manta.credit.Group;
 import br.com.manta.mantaray.R;
-import br.com.manta.mantaray.Utils;
 
-public class CreditActivity extends Activity implements View.OnClickListener{
+public class CreditActivity extends ActionBarActivity {
 
-    TextView creditInformationsTextView;
-    Button   closeDialogButton;
+    SparseArray<Group> groups = new SparseArray<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
 
-        instanceViews();
+        createData();
+        ExpandableListView listView = (ExpandableListView) findViewById(R.id.creditExpandableListView);
+        MyExpandableListAdapter adapter = new MyExpandableListAdapter(this,groups);
+        listView.setAdapter(adapter);
+        
+
     }
 
-    private void instanceViews() {
-        creditInformationsTextView = (TextView) findViewById(R.id.creditInformationsTextView);
-        closeDialogButton          = (Button) findViewById(R.id.closeDialogButton);
-
-        creditInformationsTextView.setText(Html.fromHtml(getString(R.string.credits)));
-
-        closeDialogButton.setOnClickListener(this);
-    }
-
-    public void onClick(View v) {
-        finish();
+    public void createData() {
+        for (int j = 0; j != 3; j++) {
+            Group group = new Group("Test " + j);
+            for (int i = 0; i < 99; i++) {
+                group.children.add("Sub Item" + i);
+            }
+            groups.append(j, group);
+        }
     }
 
 }
