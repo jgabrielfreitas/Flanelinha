@@ -44,6 +44,13 @@
     </string>
     <string name="close">Fechar</string>
     <string name="title_activity_about_application">Sobre</string>
+    <string name="design_and_code"><![CDATA[Design & Código]]></string>
+    <string name="jgabrielfreitas">JGabrielFreitas</string>
+    <string name="github">GitHub</string>
+    <string name="data_base">Banco de dados</string>
+    <string name="cristian_danner">Cristian Danner</string>
+    <string name="router_lib">Google Directions Android</string>
+    <string name="google_lib_router_creator">jd-alexander</string>
 
 
 </resources>

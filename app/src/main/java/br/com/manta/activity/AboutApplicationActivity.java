@@ -44,7 +44,7 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (Exception e) {}
 
-        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.git_icon), getString(R.string.open_source), getString(R.string.open_in_github)));
+        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.github_logo), getString(R.string.open_source), getString(R.string.open_in_github)));
         listAbout.add(new AboutItem(null, getString(R.string.title_activity_credit), getString(R.string.credit_details)));
         listAbout.add(new AboutItem(null, getString(R.string.application_version),  versionName));
 

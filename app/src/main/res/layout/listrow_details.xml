@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="75dp"
     android:clickable="true"
     android:orientation="vertical"
-    android:paddingLeft="40dp"
+    android:paddingLeft="@dimen/default_margin_between_views"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView1"
+        android:layout_marginLeft="@dimen/default_margin_between_views"
+        android:id="@+id/details_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_launcher"
+        android:paddingBottom="@dimen/default_margin_between_views"
+        android:paddingTop="@dimen/default_margin_between_views"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         android:text="@string/hello_world"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/link_type_image_view"
+        android:layout_toEndOf="@+id/link_type_image_view" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:background="@android:color/black"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/view" />
 
-</LinearLayout>
+    <ImageView
+        android:paddingBottom="@dimen/default_margin_between_views"
+        android:paddingTop="@dimen/default_margin_between_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/link_type_image_view"
+        android:src="@drawable/google_plus"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

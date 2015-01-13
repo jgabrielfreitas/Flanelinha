@@ -9,7 +9,7 @@
         android:layout_marginLeft="@dimen/default_margin_between_views"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/git_icon"
+        android:src="@drawable/github_logo"
         android:id="@+id/about_image_view" />
 
     <TextView

@@ -5,7 +5,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="default_margin_between_views">20dp</dimen>
+    <dimen name="double_default_margin_between_views">40dp</dimen>
     <dimen name="half_default_margin_between_views">10dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="title_text_size">20sp</dimen>
 
 </resources>
