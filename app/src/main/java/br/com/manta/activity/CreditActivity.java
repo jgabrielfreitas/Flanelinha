@@ -34,19 +34,19 @@ public class CreditActivity extends ActionBarActivity {
     public void createData() {
 
         // create contributors
-        Contributor design_and_code = new Contributor(getString(R.string.jgabrielfreitas));
-        design_and_code.children.add(new Link(null, null, getString(R.string.design_and_code)));
-        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts", "+ João Gabriel"));
-        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jgabrielfreitas", getString(R.string.github)));
+        Contributor design_and_code = new Contributor(getString(R.string.jgabrielfreitas)); // name
+        design_and_code.children.add(new Link(null, null, getString(R.string.design_and_code))); // contribution in the application
+        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts", "+ João Gabriel")); // link
+        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jgabrielfreitas", getString(R.string.github))); // link
 
-        Contributor data_base = new Contributor(getString(R.string.cristian_danner));
-        data_base.children.add(new Link(null, null, getString(R.string.data_base)));
-        data_base.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/100896323147006054393/posts", "+ Cristian Danner"));
-        data_base.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/cristiandanner", getString(R.string.github)));
+        Contributor data_base = new Contributor(getString(R.string.cristian_danner)); // name
+        data_base.children.add(new Link(null, null, getString(R.string.data_base))); // contribution in the application
+        data_base.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/100896323147006054393/posts", "+ Cristian Danner")); // link
+        data_base.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/cristiandanner", getString(R.string.github))); // link
 
-        Contributor router_lib = new Contributor(getString(R.string.google_lib_router_creator));
-        router_lib.children.add(new Link(null, null, getString(R.string.router_lib)));
-        router_lib.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jd-alexander/Google-Directions-Android", getString(R.string.github)));
+        Contributor router_lib = new Contributor(getString(R.string.google_lib_router_creator)); // name
+        router_lib.children.add(new Link(null, null, getString(R.string.router_lib))); // contribution in the application
+        router_lib.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jd-alexander/Google-Directions-Android", getString(R.string.github))); // link
 
         // add and show contributors
         groups.append(0, design_and_code);

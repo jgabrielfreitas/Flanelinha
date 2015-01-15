@@ -24,14 +24,35 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true">
 
-            <fragment
-                android:layout_width="fill_parent"
-                android:layout_height="150dp"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+            <RelativeLayout
+                android:id="@+id/relativeLayoutMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <fragment
+                    android:layout_width="fill_parent"
+                    android:layout_height="150dp"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <ImageButton
+                    android:layout_marginTop="@dimen/half_default_margin_between_views"
+                    android:layout_marginRight="@dimen/half_default_margin_between_views"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/getCurrentLocationGpsButton"
+                    android:background="@drawable/map_button"
+                    android:src="@drawable/gps_fixed"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:layout_marginTop="@dimen/half_default_margin_between_views"
@@ -39,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/note_card"
                 android:id="@+id/relativeLayoutNote"
-                android:layout_below="@+id/map"
+                android:layout_below="@+id/relativeLayoutMap"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 
