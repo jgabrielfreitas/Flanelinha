@@ -35,13 +35,6 @@
     <string name="warning">Aviso</string>
     <string name="title_activity_credit">Créditos</string>
     <string name="credit_details">Detalhes</string>
-    <string name="credits" formatted="false">
-        <![CDATA[
-                <b>• Design/Colaboração</b><br> João Gabriel (@jgabrielfreitas)<br><br>
-
-                <b>• Google-Directions-Android</b><br>jd-alexander, ksarmalkar, licryle and<br>bitdeli-chef<br>
-            ]]>
-    </string>
     <string name="close">Fechar</string>
     <string name="title_activity_about_application">Sobre</string>
     <string name="design_and_code"><![CDATA[Design & Código]]></string>
@@ -51,6 +44,8 @@
     <string name="cristian_danner">Cristian Danner</string>
     <string name="router_lib">Google Directions Android</string>
     <string name="google_lib_router_creator">jd-alexander</string>
+    <string name="getting_your_location_please_wait">Buscando a sua localização.\nPor favor, aguarde..</string>
+    <string name="cant_get_location">Não foi possível pegar a sua localização</string>
 
 
 </resources>

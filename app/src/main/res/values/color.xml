@@ -15,6 +15,6 @@
     <color name="dark_light_blue">#256D92</color>
     <color name="dark_gray">#7F7F7F</color>
     <color name="note_gray_background">#CBCBCB</color>
-    <color name="map_not_pressed">#4D595F62</color>
-    <color name="map_pressed">#4DA9B5BC</color>
+    <color name="map_color_pressed">#4D595F62</color>
+    <color name="map_color_not_pressed">#4DA9B5BC</color>
 </resources>

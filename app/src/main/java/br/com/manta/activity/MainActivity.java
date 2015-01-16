@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,21 +107,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             return;
         }
 
-        CheckinActivity.location = getLocation();
+        CheckinActivity.location = Utils.getLocation(locationManager);
         Log.i("Location","current location was successfully captured");
-    }
-
-    public synchronized Location getLocation() {
-
-        try {
-
-            String provider = locationManager.NETWORK_PROVIDER;
-            Location location = locationManager.getLastKnownLocation(provider);
-
-            return location;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
 

@@ -6,13 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Vibrator;
 import android.provider.Settings;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.view.*;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -265,6 +262,19 @@ public class Utils {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    // get User location
+    public static synchronized Location getLocation(LocationManager mLocationManager1) {
+
+        try {
+            String provider = mLocationManager1.NETWORK_PROVIDER;
+            Location location = mLocationManager1.getLastKnownLocation(provider);
+
+            return location;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

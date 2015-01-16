@@ -1,8 +1,11 @@
 package br.com.manta.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -16,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +37,7 @@ import br.com.manta.mantaray.ResizeAnimation;
 import br.com.manta.mantaray.Utils;
 
 public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener,
-                                                                  GoogleMap.OnMapLongClickListener {
+                                                                  GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private Button    checkinButton;
@@ -52,6 +56,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     public static Location location;  // user location
     Animation fadeIn;
     Animation fadeOut;
+    ImageButton getCurrentLocationGpsButton;
+    ProgressDialog dialogLoading; // TODO CREIAR DIALOG DE CARREGANDO
+    private LocationManager locationManager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +94,14 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     }
 
     private void instanceViews() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         noteTextView  = (TextView) findViewById(R.id.noteTextView);
         checkinButton = (Button)   findViewById(R.id.checkinButton);
         checkinScrollView  = (CustomScrollView) findViewById(R.id.checkinScrollView);
         relativeLayoutNote = (RelativeLayout)   findViewById(R.id.relativeLayoutNote);
 
-
+        getCurrentLocationGpsButton = (ImageButton) findViewById(R.id.getCurrentLocationGpsButton);
         localNameEditText    = (EditText) findViewById(R.id.localNameEditText);
         detailsLocalEditText = (EditText) findViewById(R.id.detailsLocalEditText);
 
@@ -100,6 +109,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         checkinButton.setOnClickListener(this);
         googleMap.setOnMapClickListener(this);
         googleMap.setOnMapLongClickListener(this);
+        getCurrentLocationGpsButton.setOnClickListener(this);
     }
 
     private void setUpMapIfNeeded() {
@@ -125,6 +135,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
+
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMarkerDragListener(this);
     }
 
     protected void onResume() {
@@ -134,19 +147,41 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     public void onClick(View v) {
 
-        // just vibrate device
-        Utils.vibrateFeedback(getApplicationContext());
+        switch (v.getId()) {
+            case R.id.getCurrentLocationGpsButton:
+                location = null;
+                dialogLoading = ProgressDialog.show(this, null, getString(R.string.getting_your_location_please_wait), false, false);
+                googleMap.clear();
+                location = Utils.getLocation(locationManager);
 
-        // save cache with position and information about the location
-        if(markerOptions != null) {
-            String name    = localNameEditText.getText().toString();
-            String details = detailsLocalEditText.getText().toString();
-            Utils.createCheckin(name, details, markerOptions.getPosition(), this);
+                if (location != null) {
+                    setUpMap();
+                    if(dialogLoading.isShowing()) // check if dialog is showing to dismiss
+                        dialogLoading.dismiss();
+                } else {
+                    if(dialogLoading.isShowing()) // check if dialog is showing to dismiss
+                        dialogLoading.dismiss();
+                    Toast.makeText(this, getString(R.string.cant_get_location), Toast.LENGTH_LONG).show();
+                }
 
-            Toast.makeText(this, "Seu check-in foi concluído com sucesso!",Toast.LENGTH_LONG).show();
-            finish();
-        } else
-            Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.",Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.checkinButton:
+                // just vibrate device
+                Utils.vibrateFeedback(getApplicationContext());
+
+                // save cache with position and information about the location
+                if(markerOptions != null) {
+                    String name    = localNameEditText.getText().toString();
+                    String details = detailsLocalEditText.getText().toString();
+                    Utils.createCheckin(name, details, markerOptions.getPosition(), this);
+
+                    Toast.makeText(this, "Seu check-in foi concluído com sucesso!", Toast.LENGTH_LONG).show();
+                    finish();
+                } else
+                    Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.",Toast.LENGTH_LONG).show();
+               break;
+        }
     }
 
     public void onMapClick(LatLng latLng) {
@@ -186,23 +221,23 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) supportMapFragment.getView().getLayoutParams();
 
-        ResizeAnimation a = new ResizeAnimation(supportMapFragment.getView());
-        a.setDuration(500);
+        ResizeAnimation animation = new ResizeAnimation(supportMapFragment.getView());
+        animation.setDuration(500);
 
         if (!getMapViewStatus()) {
             mMapViewExpanded = true;
-            a.setParams(lp.height, dpToPx(getResources(), 400));
+            animation.setParams(lp.height, dpToPx(getResources(), 400));
             checkinScrollView.setEnableScrolling(false);
             changeTextNote(Html.fromHtml(getString(R.string.note_expanded)));
             zoomInCurrentLocation();
         } else {
             checkinScrollView.setEnableScrolling(true);
             mMapViewExpanded = false;
-            a.setParams(lp.height, dpToPx(getResources(), 150));
+            animation.setParams(lp.height, dpToPx(getResources(), 150));
             changeTextNote(Html.fromHtml(getString(R.string.note_not_expanded)));
             zoomInCurrentLocation();
         }
-        supportMapFragment.getView().startAnimation(a);
+        supportMapFragment.getView().startAnimation(animation);
     }
 
     private boolean getMapViewStatus() {
@@ -230,5 +265,21 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             animateMapView();
         else
             super.onBackPressed();
+    }
+
+    public boolean onMarkerClick(Marker marker) {
+        return true;
+    }
+
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    public void onMarkerDragEnd(Marker marker) {
+
     }
 }
