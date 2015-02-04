@@ -43,9 +43,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         listViewMenu = (ListView) findViewById(R.id.mainActivityMenuListView);
 
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_maps_pin_drop), "Realizar check-in", "Marque aqui onde está o seu carro"));
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_maps_pin_drop) , "Realizar check-in", "Marque aqui onde está o seu carro"));
         optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_action_explore), "Realizar busca"   , "Mostrar caminho até seu carro"));
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_action_info)            , "Sobre"            , "Informações do aplicativo"));
+        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_action_info_outline)   , "Sobre"            , "Informações do aplicativo"));
 
         adapter  = new ItemAdapter(optionsArray, getApplicationContext());
 

@@ -5,3 +5,10 @@ beta3 - changelog
 
 beta2 -> beta3
 
+Images:
+36dip
+#4a525f
+
+* Changes in Check-in (get current location method)
+* Changes in MainActivity (images)
+* New Credits layout
