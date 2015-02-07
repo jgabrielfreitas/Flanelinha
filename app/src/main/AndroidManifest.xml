@@ -89,7 +89,7 @@
 
         <activity
             android:name="br.com.manta.activity.CheckinActivity"
-            android:label="@string/title_activity_checkin" >
+            android:label="@string/app_name" >
         </activity>
     </application>
 
