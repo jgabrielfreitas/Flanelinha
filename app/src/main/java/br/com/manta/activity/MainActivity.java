@@ -1,9 +1,11 @@
 package br.com.manta.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -23,11 +25,8 @@ import br.com.manta.mantaray.MenuItem;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends Activity {
 
-    List<MenuItem>  optionsArray = new ArrayList<>();
-    ListView        listViewMenu;
-    ItemAdapter     adapter;
     LocationManager locationManager;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,57 +40,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private void instanceViews() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        listViewMenu = (ListView) findViewById(R.id.mainActivityMenuListView);
-
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_maps_pin_drop) , "Realizar check-in", "Marque aqui onde está o seu carro"));
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_action_explore), "Realizar busca"   , "Mostrar caminho até seu carro"));
-        optionsArray.add(new MenuItem(getResources().getDrawable(R.drawable.ic_action_info_outline)   , "Sobre"            , "Informações do aplicativo"));
-
-        adapter  = new ItemAdapter(optionsArray, getApplicationContext());
-
-        listViewMenu.setAdapter(adapter);
-        listViewMenu.setOnItemClickListener(this);
-
         Utils.PACKAGE_NAME = getApplication().getPackageName();
-    }
-
-    private void doIntent(Class mClass){
-        Intent intent = new Intent(this, mClass);
-        startActivity(intent);
-    }
-
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        switch (position) {
-
-            case 0:
-                validateAndGetLocation();
-
-                if(CheckinActivity.location == null) {
-                    Toast.makeText(this, "Não foi possível obter a sua localização.\nVocê está com o GPS ligado?", Toast.LENGTH_LONG).show();
-                    validateAndGetLocation();
-                    return;
-                }
-
-                if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN))
-                    doIntent(CheckinActivity.class);
-                else
-                    createAlertDialog();
-                break;
-            case 1:
-                if(!Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
-                    Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                FindCarActivity.cacheLocation = Utils.getInformationsAboutLastLocationFromCache(getApplicationContext()); // from cache
-                FindCarActivity.currentLocation = Utils.getClientLocation(getApplicationContext()); // current currentLocation
-                doIntent(FindCarActivity.class);
-                break;
-            case 2:
-                doIntent(AboutApplicationActivity.class);
-                break;
-        }
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     }
 
     protected void onResume() {
@@ -107,27 +57,23 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             return;
         }
 
-        CheckinActivity.location = Utils.getLocation(locationManager);
-        Log.i("Location","current location was successfully captured");
+        Intent intent = new Intent(this, CheckinActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
 
-    private void createAlertDialog() {
+    public synchronized Location getLocation() {
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this).setTitle(getString(R.string.warning))
-                .setMessage(getString(R.string.warning_checkin))
-                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Utils.deleteCache(Utils.CACHE_LAST_CHECKIN); // delete old cache
-                        doIntent(CheckinActivity.class); // set user to do a new check-in
-                    }
-                })
-                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .show();
+        try {
 
+            String provider   = locationManager.NETWORK_PROVIDER;
+            Location location = locationManager.getLastKnownLocation(provider);
+
+            return location;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

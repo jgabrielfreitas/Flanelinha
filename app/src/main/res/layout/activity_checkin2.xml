@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <!-- map  -->
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <!-- Float Action Button [FAB]  -->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        fab:fab_addButtonColorNormal="@color/dark_violet"
+        fab:fab_addButtonColorPressed="@color/dark_blue_2"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:id="@+id/fab_menu"
+        android:layout_marginRight="@dimen/half_default_margin_between_views"
+        android:layout_marginBottom="@dimen/half_default_margin_between_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonSize="mini"
+            fab:fab_title="Action B" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_menu_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonSize="mini"
+            fab:fab_title="@string/title_activity_about_application" />
+
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>
+
+
