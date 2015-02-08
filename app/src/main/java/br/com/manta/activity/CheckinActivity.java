@@ -3,13 +3,21 @@ package br.com.manta.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -17,21 +25,32 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+import java.util.Locale;
+
+import br.com.manta.informations.LocationAddress;
+import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
 
-public class CheckinActivity extends ActionBarActivity implements View.OnClickListener {
+public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     FloatingActionButton floatAbout;
     FloatingActionButton floatCheckin;
+    FloatingActionButton floatFindCar;
+    FloatingActionsMenu floatMenu;
+    TextView streetTextView;
+    TextView stateTextView;
     MarkerOptions markerOptions;
     Marker marker;
-    private String  titleMarker = "Você está aqui!";
+    private String titleMarker = "Você está aqui!";
+    private String titleNewMarker = "Local escolhido";
     LatLng currentPosition;
     public static Location location;
     private LocationManager locationManager;
     ProgressDialog dialog;
+    LocationXml locationXml = new LocationXml();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +64,34 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void instanceViews() {
 
-        floatAbout = (FloatingActionButton) findViewById(R.id.fab_menu_about);
+        streetTextView = (TextView) findViewById(R.id.streetTextView);
+        stateTextView = (TextView) findViewById(R.id.stateTextView);
+
+
+        floatMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
+
+        floatAbout = new FloatingActionButton(this);
         floatAbout.setIcon(R.drawable.ic_action_info_outline);
         floatAbout.setSize(FloatingActionButton.SIZE_MINI);
+        floatAbout.setId(R.id.fab_menu_about);
+        floatAbout.setTitle(getString(R.string.title_activity_about_application));
+        floatMenu.addButton(floatAbout);
 
         floatCheckin = (FloatingActionButton) findViewById(R.id.fab_menu_checkin);
         floatCheckin.setIcon(R.drawable.ic_maps_pin_drop);
         floatCheckin.setSize(FloatingActionButton.SIZE_MINI);
 
+        floatFindCar = (FloatingActionButton) findViewById(R.id.fab_menu_find_car);
+        floatFindCar.setIcon(R.drawable.ic_action_explore);
+        floatFindCar.setSize(FloatingActionButton.SIZE_MINI);
 
+
+        floatMenu.setOnClickListener(this);
         floatAbout.setOnClickListener(this);
         floatCheckin.setOnClickListener(this);
+        floatFindCar.setOnClickListener(this);
+        googleMap.setOnMapClickListener(this);
+
     }
 
     private void setUpMapIfNeeded() {
@@ -72,49 +108,83 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void setUpMap() {
 
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 
         markerOptions = new MarkerOptions();
-        markerOptions.position(currentPosition).title(titleMarker).snippet("Rua Juiz de Fora");
+        markerOptions.position(currentPosition).title(titleMarker);
 
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
 
-        if(dialog.isShowing())
+        if (dialog.isShowing())
             dialog.dismiss();
 
+        setAddress(location);
     }
 
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.fab_menu_about:
-                Intent intent = new Intent(this, AboutApplicationActivity.class);
-                startActivity(intent);
+                Intent intent_about = new Intent(this, AboutApplicationActivity.class);
+                startActivity(intent_about);
+                break;
+
+            case R.id.fab_menu:
+                if(floatMenu.isExpanded())
+                    Toast.makeText(this, "aberto", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(this, "fechado", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.fab_menu_find_car:
+
+                if(Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
+                    Intent intent_find = new Intent(this, FindCarActivity.class);
+                    startActivity(intent_find);
+                } else {
+                    Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
+                }
+
+                if(floatMenu.isExpanded())
+                    floatMenu.collapse();
+
                 break;
 
             case R.id.fab_menu_checkin:
 
-//                // just vibrate device
-//                Utils.vibrateFeedback(getApplicationContext());
-//
-//                // save cache with position and information about the location
-//                if(markerOptions != null) {
-//                    String name    = localNameEditText.getText().toString();
-//                    String details = detailsLocalEditText.getText().toString();
-//                    Utils.createCheckin(name, details, markerOptions.getPosition(), this);
-//
-//                    Toast.makeText(this, "Seu check-in foi concluído com sucesso!",Toast.LENGTH_LONG).show();
-//                    finish();
-//                } else
-//                    Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.",Toast.LENGTH_LONG).show();
+                // just vibrate device
+                Utils.vibrateFeedback(getApplicationContext());
+
+                // save cache with position and information about the location
+                if (markerOptions != null) {
+                    String name = locationXml.name;
+                    String details = locationXml.address;
+                    Utils.createCheckin(name, details, markerOptions.getPosition(), this);
+
+                    Toast.makeText(this, "Seu check-in foi concluído com sucesso!", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.", Toast.LENGTH_LONG).show();
+
+                if(floatMenu.isExpanded())
+                    floatMenu.collapse();
                 break;
 
         }
+    }
+
+    private void setAddress(Location mLocation) {
+
+        if (mLocation != null) {
+            double latitude = mLocation.getLatitude();
+            double longitude = mLocation.getLongitude();
+            LocationAddress locationAddress = new LocationAddress();
+            locationAddress.getAddressFromLocation(latitude, longitude, getApplicationContext(), new GeocoderHandler());
+        }
+
     }
 
     protected void onResume() {
@@ -122,7 +192,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         setUpMapIfNeeded();
     }
 
-    private synchronized void gettingInformations(){
+    private synchronized void gettingInformations() {
 
         dialog = ProgressDialog.show(this, null, "Carregando..", false, false);
 
@@ -133,8 +203,74 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     }
 
-    private void zoomInCurrentLocation(){
+    private void zoomInCurrentLocation() {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
+    }
+
+    public void onMapClick(LatLng latLng) {
+
+        if(floatMenu.isExpanded())
+            floatMenu.collapse();
+
+        // Creating a marker
+        markerOptions = new MarkerOptions();
+
+        // Setting the position for the marker
+        markerOptions.position(latLng);
+
+        // Setting the title for the marker.
+        // This will be displayed on taping the marker
+        markerOptions.title(titleNewMarker);
+
+        // user can drag the marker
+        markerOptions.draggable(true);
+
+        // Clears the previously touched position
+        googleMap.clear();
+
+        // Animating to the touched position
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        // Placing a marker on the touched position
+        marker = googleMap.addMarker(markerOptions);
+        marker.showInfoWindow();
+
+        zoomInCurrentLocation();
+
+        Location newLocation = new Location(locationManager.NETWORK_PROVIDER);
+        newLocation.setLatitude(latLng.latitude);
+        newLocation.setLongitude(latLng.longitude);
+        setAddress(newLocation);
+
+    }
+
+    private class GeocoderHandler extends Handler {
+        public void handleMessage(Message message) {
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    break;
+                default:
+                    locationAddress = null;
+            }
+
+            String[] address = locationAddress.split(";");
+
+            try {
+                streetTextView.setText(address[0]);
+                stateTextView.setText(address[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                streetTextView.setText("- - -");
+                stateTextView.setText("- - -");
+            }
+
+            locationXml.name = streetTextView.getText().toString();
+            locationXml.address = stateTextView.getText().toString();
+
+        }
     }
 
 

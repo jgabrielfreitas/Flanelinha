@@ -24,7 +24,7 @@
     <string name="optional_field_plus">(Campo opcional)\nEx: Em frente à padaria</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
-    <string name="title_activity_find_car">Busca</string>
+    <string name="title_activity_find_car">Criar rota</string>
     <string name="title_activity_details_map">Detalhes</string>
     <string name="add_widget">Add widget</string>
     <string name="quick_checkin">Check-in rápido!</string>

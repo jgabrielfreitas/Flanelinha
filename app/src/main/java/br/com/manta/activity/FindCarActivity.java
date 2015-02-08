@@ -1,7 +1,9 @@
 package br.com.manta.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -27,8 +29,9 @@ import br.com.manta.route.RoutingListener;
 public class FindCarActivity extends ActionBarActivity implements RoutingListener, View.OnClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
-    public static LocationXml cacheLocation; // checkin currentLocation
-    public static Location  currentLocation; // currentLocation
+    public  LocationXml cacheLocation; // checkin currentLocation
+    public  Location  currentLocation; // currentLocation
+    private LocationManager locationManager;
 
     TextView nameLocationTextView;
     TextView detailsLocationTextView;
@@ -37,6 +40,12 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_car);
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        currentLocation = Utils.getLocation(locationManager);
+
+        cacheLocation = Utils.getInformationsAboutLastLocationFromCache(this);
+
         instanceViews();
         setUpMapIfNeeded();
     }
