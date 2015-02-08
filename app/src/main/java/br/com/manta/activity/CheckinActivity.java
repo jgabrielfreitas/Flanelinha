@@ -66,8 +66,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         streetTextView = (TextView) findViewById(R.id.streetTextView);
         stateTextView = (TextView) findViewById(R.id.stateTextView);
 
-
-
         floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
         floatAbout.setIcon(R.drawable.ic_action_info_outline);
         floatAbout.setSize(FloatingActionButton.SIZE_MINI);
@@ -122,7 +120,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         switch (view.getId()) {
 
-            case R.id.fab_menu_about:
+            case R.id.fab_about:
                 closeFloatMenu();
                 Intent intent_about = new Intent(this, AboutApplicationActivity.class);
                 startActivity(intent_about);
