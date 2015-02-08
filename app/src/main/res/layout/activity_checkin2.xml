@@ -90,6 +90,14 @@
             fab:fab_addButtonSize="mini"
             fab:fab_title="@string/title_activity_find_car" />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:background="@drawable/map_button"
+            android:id="@+id/fab_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonSize="mini"
+            fab:fab_title="@string/title_activity_about_application" />
+
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

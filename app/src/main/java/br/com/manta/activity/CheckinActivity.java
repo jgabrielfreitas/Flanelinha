@@ -39,7 +39,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     FloatingActionButton floatAbout;
     FloatingActionButton floatCheckin;
     FloatingActionButton floatFindCar;
-    FloatingActionsMenu floatMenu;
     TextView streetTextView;
     TextView stateTextView;
     MarkerOptions markerOptions;
@@ -68,14 +67,10 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         stateTextView = (TextView) findViewById(R.id.stateTextView);
 
 
-        floatMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
 
-        floatAbout = new FloatingActionButton(this);
+        floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
         floatAbout.setIcon(R.drawable.ic_action_info_outline);
         floatAbout.setSize(FloatingActionButton.SIZE_MINI);
-        floatAbout.setId(R.id.fab_menu_about);
-        floatAbout.setTitle(getString(R.string.title_activity_about_application));
-        floatMenu.addButton(floatAbout);
 
         floatCheckin = (FloatingActionButton) findViewById(R.id.fab_menu_checkin);
         floatCheckin.setIcon(R.drawable.ic_maps_pin_drop);
@@ -86,7 +81,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         floatFindCar.setSize(FloatingActionButton.SIZE_MINI);
 
 
-        floatMenu.setOnClickListener(this);
         floatAbout.setOnClickListener(this);
         floatCheckin.setOnClickListener(this);
         floatFindCar.setOnClickListener(this);
@@ -129,15 +123,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         switch (view.getId()) {
 
             case R.id.fab_menu_about:
+                closeFloatMenu();
                 Intent intent_about = new Intent(this, AboutApplicationActivity.class);
                 startActivity(intent_about);
-                break;
-
-            case R.id.fab_menu:
-                if(floatMenu.isExpanded())
-                    Toast.makeText(this, "aberto", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(this, "fechado", Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.fab_menu_find_car:
@@ -149,8 +137,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
                     Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
                 }
 
-                if(floatMenu.isExpanded())
-                    floatMenu.collapse();
+                closeFloatMenu();
 
                 break;
 
@@ -158,6 +145,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
                 // just vibrate device
                 Utils.vibrateFeedback(getApplicationContext());
+                closeFloatMenu();
 
                 // save cache with position and information about the location
                 if (markerOptions != null) {
@@ -169,8 +157,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
                 } else
                     Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.", Toast.LENGTH_LONG).show();
 
-                if(floatMenu.isExpanded())
-                    floatMenu.collapse();
                 break;
 
         }
@@ -209,8 +195,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     public void onMapClick(LatLng latLng) {
 
-        if(floatMenu.isExpanded())
-            floatMenu.collapse();
+        closeFloatMenu();
 
         // Creating a marker
         markerOptions = new MarkerOptions();
@@ -271,6 +256,12 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             locationXml.address = stateTextView.getText().toString();
 
         }
+    }
+
+    private void closeFloatMenu(){
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
+        if(menu.isExpanded())
+            menu.collapse();
     }
 
 
