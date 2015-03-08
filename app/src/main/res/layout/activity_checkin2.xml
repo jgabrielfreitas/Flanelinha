@@ -106,6 +106,15 @@
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
+    <ProgressBar
+        android:layout_marginLeft="@dimen/half_default_margin_between_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressFindLocationsDetails"
+        android:layout_below="@+id/topStreetView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
 
 

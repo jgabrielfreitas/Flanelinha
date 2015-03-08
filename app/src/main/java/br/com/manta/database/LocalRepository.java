@@ -91,6 +91,7 @@ public class LocalRepository extends SQLiteOpenHelper {
                 cursor.getDouble(1),
                 cursor.getString(3),
                 cursor.getString(4) );
+
         return  local;
     }
 
