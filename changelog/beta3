@@ -12,3 +12,4 @@ Images:
 * Changes in Check-in (get current location method)
 * Changes in MainActivity (images)
 * New Credits layout
+* Changes in get location (now using Google Places API)
