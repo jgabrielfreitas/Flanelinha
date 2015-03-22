@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.manta.mantaray" >
+    package="br.com.manta.mantaray">
 
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,10 +15,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_flanelinha_144"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="br.com.manta.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,17 +27,23 @@
         </activity>
 
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
+
+        <!-- <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
+            -->
 
         <activity
             android:name="br.com.manta.activity.OldCheckActivity"
             android:label="@string/title_activity_checkin"
             android:parentActivityName="br.com.manta.activity.MainActivity"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
@@ -51,26 +57,16 @@
         <activity
             android:name="br.com.manta.activity.FindCarActivity"
             android:label="@string/title_activity_find_car"
-            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            android:parentActivityName="br.com.manta.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
         </activity>
 
-        <receiver android:name="br.com.manta.widget.QuickCheckInWidget" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/quick_check_in_widget_info" />
-        </receiver>
-
         <activity
             android:name="br.com.manta.activity.AboutApplicationActivity"
             android:label="@string/title_activity_about_application"
-            android:parentActivityName="br.com.manta.activity.MainActivity" >
+            android:parentActivityName="br.com.manta.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.manta.activity.MainActivity" />
@@ -89,8 +85,7 @@
 
         <activity
             android:name="br.com.manta.activity.CheckinActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -17,6 +16,11 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -26,10 +30,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import br.com.manta.informations.LocationAddress;
 import br.com.manta.informations.LocationXml;
+import br.com.manta.informations.UserCurrentPlace;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
 
-public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
+public class CheckinActivity extends ActionBarActivity implements View.OnClickListener,
+                                                                  GoogleMap.OnMapClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     FloatingActionButton floatAbout;
@@ -41,8 +47,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     Marker marker;
     private String titleMarker = "Você está aqui!";
     private String titleNewMarker = "Local escolhido";
-    LatLng currentPosition;
-    public static Location location;
+    public static UserCurrentPlace userPlace;
     private LocationManager locationManager;
     LocationXml locationXml = new LocationXml();
     ProgressBar progressBar;
@@ -97,17 +102,15 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void setUpMap() {
 
-        currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
-
         markerOptions = new MarkerOptions();
-        markerOptions.position(currentPosition).title(titleMarker);
+        markerOptions.position(userPlace.getCoordinates()).title(titleMarker).snippet(userPlace.getCurrentPlace().getName().toString());
 
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
 
-        setAddress(location);
+        //setAddress(location);
     }
 
     public void onClick(View view) {
@@ -177,7 +180,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        location = Utils.getLocation(locationManager);
+        //location = Utils.getLocation(locationManager);
     }
 
     private void zoomInCurrentLocation() {
@@ -213,9 +216,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         zoomInCurrentLocation();
 
-        ClientLocation mClientLocation = new ClientLocation();
-        mClientLocation.latLng = latLng;
-        mClientLocation.execute();
+
+
+//        ClientLocation mClientLocation = new ClientLocation();
+//        mClientLocation.latLng = latLng;
+//        mClientLocation.execute();
 
 
     }
@@ -245,7 +250,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             }
 
 
-            // write location name
+            // write location name—
             locationXml.name = streetTextView.getText().toString();
             locationXml.address = stateTextView.getText().toString();
 
