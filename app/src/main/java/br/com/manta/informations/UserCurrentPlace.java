@@ -7,7 +7,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.PlaceFilter;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
@@ -63,7 +62,7 @@ public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
                                              .addApi(Places.PLACE_DETECTION_API)
                                              .build();
 
-        googleApiClient.connect();
+        connectGoogleApiClient();
 
         logFlow("GoogleApliClient created. Returning.......");
         return googleApiClient;
@@ -114,7 +113,12 @@ public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
         Log.i(TAG, flow);
     }
 
+    private void connectGoogleApiClient(){
+        googleApiClient.connect();
+    }
+
     public void disconnectGoogleApiClient(){
         googleApiClient.disconnect();
     }
+
 }

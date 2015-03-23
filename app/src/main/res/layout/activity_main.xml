@@ -17,6 +17,7 @@
         android:indeterminate="false" />
 
     <TextView
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:textColor="#9c9c9c"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,4 +26,5 @@
         android:id="@+id/placeTextView"
         android:layout_below="@+id/progressBar"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

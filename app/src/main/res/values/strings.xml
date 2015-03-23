@@ -46,7 +46,7 @@
     <string name="google_lib_router_creator">jd-alexander</string>
     <string name="getting_your_location_please_wait">Buscando a sua localização.\nPor favor, aguarde..</string>
     <string name="cant_get_location">Não foi possível pegar a sua localização</string>
-    <string name="getting_your_location">Buscando a sua localização</string>
+    <string name="getting_your_location">Carregando..</string>
 
 
 </resources>

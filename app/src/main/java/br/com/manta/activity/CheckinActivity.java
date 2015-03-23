@@ -1,5 +1,6 @@
 package br.com.manta.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -47,10 +48,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     Marker marker;
     private String titleMarker = "Você está aqui!";
     private String titleNewMarker = "Local escolhido";
-    public static UserCurrentPlace userPlace;
     private LocationManager locationManager;
     LocationXml locationXml = new LocationXml();
-    ProgressBar progressBar;
+    ProgressDialog progressBar;
+
+    UserCurrentPlace userPlace;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         streetTextView = (TextView) findViewById(R.id.streetTextView);
         stateTextView  = (TextView) findViewById(R.id.stateTextView);
-        progressBar    = (ProgressBar) findViewById(R.id.progressFindLocationsDetails);
 
         floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
         floatAbout.setIcon(R.drawable.ic_action_info_outline);
@@ -94,16 +95,15 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             // Try to obtain the map from the SupportMapFragment.
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
-            if (googleMap != null) {
+//            if (googleMap != null)
                 setUpMap();
-            }
         }
     }
 
     private void setUpMap() {
 
         markerOptions = new MarkerOptions();
-        markerOptions.position(userPlace.getCoordinates()).title(titleMarker).snippet(userPlace.getCurrentPlace().getName().toString());
+        markerOptions.position(userPlace.getPlaceList().get(0).getLatLng()).title(titleMarker);
 
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
@@ -172,7 +172,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
 
-        progressBar.setVisibility(View.INVISIBLE);
         setUpMapIfNeeded();
     }
 
@@ -215,14 +214,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
-
-
-
-//        ClientLocation mClientLocation = new ClientLocation();
-//        mClientLocation.latLng = latLng;
-//        mClientLocation.execute();
-
-
     }
 
     private class GeocoderHandler extends Handler {
@@ -261,36 +252,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         if(menu.isExpanded())
             menu.collapse();
-    }
-
-    private class ClientLocation extends AsyncTask<Void, Void, Void>{
-
-        LatLng latLng;
-
-        protected void onPreExecute() {
-
-            progressBar.setVisibility(View.VISIBLE);
-            streetTextView.setVisibility(View.INVISIBLE);
-            stateTextView.setVisibility(View.INVISIBLE);
-
-        }
-
-        protected Void doInBackground(Void... params) {
-
-            Location newLocation = new Location(locationManager.NETWORK_PROVIDER);
-            newLocation.setLatitude(latLng.latitude);
-            newLocation.setLongitude(latLng.longitude);
-            setAddress(newLocation);
-
-            return null;
-        }
-
-        protected void onPostExecute(Void aVoid) {
-
-            progressBar.setVisibility(View.INVISIBLE);
-            streetTextView.setVisibility(View.VISIBLE);
-            stateTextView.setVisibility(View.VISIBLE);
-        }
     }
 
 }
