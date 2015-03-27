@@ -1,27 +1,19 @@
 package br.com.manta.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -35,8 +27,7 @@ import br.com.manta.informations.UserCurrentPlace;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
 
-public class CheckinActivity extends ActionBarActivity implements View.OnClickListener,
-                                                                  GoogleMap.OnMapClickListener {
+public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     FloatingActionButton floatAbout;
@@ -46,13 +37,13 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     TextView stateTextView;
     MarkerOptions markerOptions;
     Marker marker;
+    Location location;
     private String titleMarker = "Você está aqui!";
     private String titleNewMarker = "Local escolhido";
     private LocationManager locationManager;
     LocationXml locationXml = new LocationXml();
-    ProgressDialog progressBar;
 
-    UserCurrentPlace userPlace;
+    public static UserCurrentPlace userPlace;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +58,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private void instanceViews() {
 
         streetTextView = (TextView) findViewById(R.id.streetTextView);
-        stateTextView  = (TextView) findViewById(R.id.stateTextView);
+        stateTextView = (TextView) findViewById(R.id.stateTextView);
 
         floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
         floatAbout.setIcon(R.drawable.ic_action_info_outline);
@@ -96,7 +87,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
 //            if (googleMap != null)
-                setUpMap();
+            setUpMap();
         }
     }
 
@@ -110,7 +101,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
         zoomInCurrentLocation();
 
-        //setAddress(location);
+        setAddress(Utils.getLocation(locationManager));
     }
 
     public void onClick(View view) {
@@ -125,7 +116,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
             case R.id.fab_menu_find_car:
 
-                if(Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
+                if (Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
                     Intent intent_find = new Intent(this, FindCarActivity.class);
                     startActivity(intent_find);
                 } else
@@ -156,15 +147,14 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         }
     }
 
+    // set address to TextViews (street name and state)
     private void setAddress(Location mLocation) {
 
         if (mLocation != null) {
 
             double latitude = mLocation.getLatitude();
             double longitude = mLocation.getLongitude();
-            LocationAddress locationAddress = new LocationAddress();
             LocationAddress.getAddressFromLocation(latitude, longitude, getApplicationContext(), new GeocoderHandler());
-
         }
 
     }
@@ -178,8 +168,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private synchronized void gettingInformations() {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        //location = Utils.getLocation(locationManager);
     }
 
     private void zoomInCurrentLocation() {
@@ -214,6 +202,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
+
+        location = new Location(locationManager.NETWORK_PROVIDER);
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
+        setAddress(location);
     }
 
     private class GeocoderHandler extends Handler {
@@ -248,9 +241,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         }
     }
 
-    private void closeFloatMenu(){
+    private void closeFloatMenu() {
         FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
-        if(menu.isExpanded())
+        if (menu.isExpanded())
             menu.collapse();
     }
 

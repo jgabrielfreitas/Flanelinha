@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by JGabrielFreitas on 21/03/15.
  */
-public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
+public class UserCurrentPlace {
 
     private Activity activity;
     GoogleApiClient googleApiClient;
@@ -35,8 +35,7 @@ public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
     public UserCurrentPlace(Activity activity) {
         super();
         this.activity = activity;
-        buildPeddingResult(createGoogleApiClient());
-        logFlow("object created");
+        createGoogleApiClient();
     }
 
     public Place getCurrentPlace() {
@@ -55,8 +54,6 @@ public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
 
     private GoogleApiClient createGoogleApiClient() {
 
-        logFlow("creating GoogleApliClient......");
-
         googleApiClient = new GoogleApiClient.Builder(getActivity())
                                              .addApi(Places.GEO_DATA_API)
                                              .addApi(Places.PLACE_DETECTION_API)
@@ -64,37 +61,11 @@ public class UserCurrentPlace implements  ResultCallback<PlaceLikelihoodBuffer>{
 
         connectGoogleApiClient();
 
-        logFlow("GoogleApliClient created. Returning.......");
         return googleApiClient;
     }
 
-    private void buildPeddingResult(GoogleApiClient googleApiClient) {
-
-        logFlow("starting method buildPeddingResult()");
-
-        PlaceFilter filter = new PlaceFilter();
-        filter.getPlaceTypes();
-        filter.getPlaceIds();
-
-        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(googleApiClient, filter);
-
-        result.setResultCallback(this);
-    }
-
-    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-
-        logFlow("starting method onResult()");
-
-        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-            logFlow(String.format("Place to add: %s", placeLikelihood.getPlace().getName()));
-            placeList.add(placeLikelihood.getPlace().freeze());
-        }
-
-        setCurrentPlace(placeList.get(0).freeze());
-        setCoordinates(getCurrentPlace().getLatLng());
-        likelyPlaces.release();
-
-        logFlow("all places was listed");
+    public GoogleApiClient getGoogleApiClient() {
+        return googleApiClient;
     }
 
     public List<Place> getPlaceList(){

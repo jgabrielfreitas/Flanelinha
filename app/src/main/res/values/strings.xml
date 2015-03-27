@@ -47,6 +47,8 @@
     <string name="getting_your_location_please_wait">Buscando a sua localização.\nPor favor, aguarde..</string>
     <string name="cant_get_location">Não foi possível pegar a sua localização</string>
     <string name="getting_your_location">Carregando..</string>
+    <string name="title_activity_location_not_found">Sem localização</string>
+    <string name="location_not_found">Não foi possível obter\na sua localização. Verifique sua internet e tente novamente!</string>
 
 
 </resources>
