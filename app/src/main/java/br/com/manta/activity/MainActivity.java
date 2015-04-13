@@ -82,7 +82,7 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
             userCurrentPlace.setCoordinates(userCurrentPlace.getCurrentPlace().getLatLng());
             likelyPlaces.release();
 
-            CheckinActivity.userPlace = userCurrentPlace;
+            Utils.setCurrentPlace(userCurrentPlace);
             doIntent(CheckinActivity.class, true);
         } catch (Exception e) {
             e.printStackTrace();

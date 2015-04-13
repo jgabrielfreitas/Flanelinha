@@ -49,6 +49,8 @@
     <string name="getting_your_location">Carregando..</string>
     <string name="title_activity_location_not_found">Sem localização</string>
     <string name="location_not_found">Não foi possível obter\na sua localização. Verifique sua internet e tente novamente!</string>
+    <string name="creating_route">Criando rota</string>
+    <string name="register_error">Erro na leitura do Cadastro</string>
 
 
 </resources>

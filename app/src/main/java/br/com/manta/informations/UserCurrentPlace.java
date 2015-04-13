@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceFilter;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -39,6 +34,7 @@ public class UserCurrentPlace {
     }
 
     public Place getCurrentPlace() {
+        logFlow("getCurrentPlace() : " + currentPlace);
         return currentPlace;
     }
 

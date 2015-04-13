@@ -43,8 +43,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private LocationManager locationManager;
     LocationXml locationXml = new LocationXml();
 
-    public static UserCurrentPlace userPlace;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin2);
@@ -94,7 +92,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private void setUpMap() {
 
         markerOptions = new MarkerOptions();
-        markerOptions.position(userPlace.getPlaceList().get(0).getLatLng()).title(titleMarker);
+        markerOptions.position(Utils.getCurrentPlace().getPlaceList().get(0).getLatLng()).title(titleMarker);
 
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
@@ -162,7 +160,15 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
 
-        setUpMapIfNeeded();
+        // if any exception throw here,
+        // go to MainActivity
+        try {
+            setUpMapIfNeeded();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Utils.reliefValve(this);
+        }
     }
 
     private synchronized void gettingInformations() {

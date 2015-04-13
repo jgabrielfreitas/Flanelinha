@@ -2,6 +2,7 @@ package br.com.manta.mantaray;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,19 +24,31 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
+import br.com.manta.activity.MainActivity;
 import br.com.manta.informations.LocationXml;
+import br.com.manta.informations.UserCurrentPlace;
 import br.com.manta.services.GPSTracker;
 
 /**
  * Created by JGabrielFreitas on 01/01/15.
  */
-public class Utils {
+public class Utils extends Application {
 
     public static final String CACHE_LAST_CHECKIN = "LAST_CHECKIN.xml";
     public static final String URL_IN_GITHUB = "https://github.com/jgabrielfreitas/Flanelinha";
     public static       String PACKAGE_NAME;
 
     public static boolean isConnected = false;
+
+    private static UserCurrentPlace currentPlace;
+
+    public static UserCurrentPlace getCurrentPlace() {
+        return currentPlace;
+    }
+
+    public static void setCurrentPlace(UserCurrentPlace currentPlace) {
+        Utils.currentPlace = currentPlace;
+    }
 
     // create cache with name and content
     public static void createCache(final String nameCache, final String toSave, final Context context, final String classRequest) {
@@ -78,27 +91,27 @@ public class Utils {
 
             try {
 
-                FileInputStream fis = context.openFileInput(Utils.CACHE_LAST_CHECKIN);
-                InputStreamReader isr = new InputStreamReader(fis);
-                BufferedReader br = new BufferedReader(isr);
-                String linha = null;
-                String cache_salvo = null;
+                FileInputStream fileInputStream = context.openFileInput(Utils.CACHE_LAST_CHECKIN);
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String line = null;
+                String savedCache = null;
 
-                while ((linha = br.readLine()) != null)
-                    if (cache_salvo == null)
-                        cache_salvo = linha;
+                while ((line = bufferedReader.readLine()) != null)
+                    if (savedCache == null)
+                        savedCache = line;
                     else
-                        cache_salvo += "\n" + linha;
+                        savedCache += "\n" + line;
 
                 XStream xstream = new XStream(new DomDriver());
 
                 xstream.processAnnotations(new Class[]{ LocationXml.class });
 
-                String XML = cache_salvo;
+                String XML = savedCache;
                 lastLocation = (LocationXml) xstream.fromXML(XML);
 
             } catch (Exception e) {
-                Toast.makeText(context, "Erro na leitura do Cadastro", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.register_error), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -275,6 +288,13 @@ public class Utils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    // method responsible for restart application if any exception throw
+    public static void reliefValve(Activity activityRequest){
+        Intent intent = new Intent(activityRequest, MainActivity.class);
+        activityRequest.startActivity(intent);
+        activityRequest.finish();
     }
 
 }

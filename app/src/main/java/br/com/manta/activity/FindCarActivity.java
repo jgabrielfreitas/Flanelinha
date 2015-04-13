@@ -1,9 +1,11 @@
 package br.com.manta.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -26,12 +28,12 @@ import br.com.manta.route.Route;
 import br.com.manta.route.Routing;
 import br.com.manta.route.RoutingListener;
 
-public class FindCarActivity extends ActionBarActivity implements RoutingListener, View.OnClickListener {
+public class FindCarActivity extends ActionBarActivity implements View.OnClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     public  LocationXml cacheLocation; // checkin currentLocation
-    public  Location  currentLocation; // currentLocation
-    private LocationManager locationManager;
+
+    private LatLng currentPlace = Utils.getCurrentPlace().getCurrentPlace().getLatLng();
 
     TextView nameLocationTextView;
     TextView detailsLocationTextView;
@@ -40,9 +42,6 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_car);
-
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        currentLocation = Utils.getLocation(locationManager);
 
         cacheLocation = Utils.getInformationsAboutLastLocationFromCache(this);
 
@@ -85,43 +84,15 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
 
     private void setUpMap() {
 
-        if (cacheLocation != null) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(new LatLng(cacheLocation.latitude, cacheLocation.longitude)).title("Seu carro").snippet("Último check-in");
+        RouteCreatorAsyncTask routeCreatorAsyncTask = new RouteCreatorAsyncTask();
+        routeCreatorAsyncTask.execute();
 
-            Marker marker = googleMap.addMarker(markerOptions);
-            marker.showInfoWindow();
-        }
-
-        if (cacheLocation != null && currentLocation != null) {
-            // create and draw the route
-            LatLng start = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            LatLng end   = new LatLng(cacheLocation.latitude, cacheLocation.longitude);
-            Routing routing = new Routing(Routing.TravelMode.WALKING);
-            routing.registerListener(this);
-            routing.execute(start, end);
-        }
-
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
-        googleMap.setMyLocationEnabled(true);
     }
 
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
 
-    }
-
-    public void onRoutingFailure() {}
-
-    public void onRoutingStart() {}
-
-    public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
-        PolylineOptions polyoptions = new PolylineOptions();
-        polyoptions.color(Color.parseColor("#303F9F"));
-        polyoptions.width(15);
-        polyoptions.addAll(mPolyOptions.getPoints());
-        googleMap.addPolyline(polyoptions);
     }
 
     public void onClick(View v) {
@@ -131,4 +102,65 @@ public class FindCarActivity extends ActionBarActivity implements RoutingListene
         Utils.deleteCache(Utils.CACHE_LAST_CHECKIN);
         finish();
     }
+
+    private class RouteCreatorAsyncTask extends AsyncTask<Void, Void, Void> implements RoutingListener{
+
+        ProgressDialog dialog;
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog = ProgressDialog.show(FindCarActivity.this, "Aguarde", getString(R.string.creating_route), false, false);
+        }
+
+        protected Void doInBackground(Void... params) {
+
+            // create and draw the route
+            LatLng end = new LatLng(cacheLocation.latitude, cacheLocation.longitude);
+            Routing routing = new Routing(Routing.TravelMode.WALKING);
+            routing.registerListener(this);
+            routing.execute(currentPlace, end);
+
+            return null;
+        }
+
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            // add in google map the marker with check-in location
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(cacheLocation.latitude, cacheLocation.longitude)).title("Seu carro").snippet("Último check-in");
+
+            Marker marker = googleMap.addMarker(markerOptions);
+            marker.showInfoWindow();
+
+            // add in google map the user's current location
+            MarkerOptions markerOptionsCurrent = new MarkerOptions();
+            markerOptionsCurrent.position(currentPlace).title("Você").snippet("Ponto de partida");
+
+            Marker markerCurrent = googleMap.addMarker(markerOptionsCurrent);
+            markerCurrent.showInfoWindow();
+
+            googleMap.setMyLocationEnabled(true);
+        }
+
+        public void onRoutingFailure() {}
+
+        public void onRoutingStart() {}
+
+        public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
+            PolylineOptions polyoptions = new PolylineOptions();
+            polyoptions.color(getResources().getColor(R.color.router_color));
+            polyoptions.width(15);
+            polyoptions.addAll(mPolyOptions.getPoints());
+            googleMap.addPolyline(polyoptions);
+
+            if (dialog != null && dialog.isShowing())
+                dialog.dismiss();
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPlace, 15));
+        }
+    }
+
+
 }
