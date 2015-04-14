@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import br.com.manta.informations.LocationAddress;
 import br.com.manta.informations.LocationXml;
-import br.com.manta.informations.UserCurrentPlace;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
 
@@ -59,11 +58,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         stateTextView = (TextView) findViewById(R.id.stateTextView);
 
         floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
-        floatAbout.setIcon(R.drawable.ic_action_info_outline);
+        floatAbout.setIcon(R.drawable.ic_action_info);
         floatAbout.setSize(FloatingActionButton.SIZE_MINI);
 
         floatCheckin = (FloatingActionButton) findViewById(R.id.fab_menu_checkin);
-        floatCheckin.setIcon(R.drawable.ic_maps_pin_drop);
+        floatCheckin.setIcon(R.drawable.ic_action_room);
         floatCheckin.setSize(FloatingActionButton.SIZE_MINI);
 
         floatFindCar = (FloatingActionButton) findViewById(R.id.fab_menu_find_car);
