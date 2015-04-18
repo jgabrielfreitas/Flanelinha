@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_name_text_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="fill_vertical"
+    android:paddingTop="@dimen/default_margin_between_views"
+    android:paddingBottom="@dimen/default_margin_between_views"
+    android:paddingLeft="@dimen/double_default_margin_between_views"
+    android:text="Teste do título"
+    android:textColor="@color/dark_blue_3"
+    android:textSize="@dimen/title_text_size"
+    android:textStyle="bold" />

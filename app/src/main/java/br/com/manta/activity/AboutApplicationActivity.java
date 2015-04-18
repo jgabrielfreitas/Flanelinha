@@ -2,15 +2,14 @@ package br.com.manta.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +43,9 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (Exception e) {}
 
-        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.git_icon), getString(R.string.open_source), getString(R.string.open_in_github)));
-        listAbout.add(new AboutItem(null, getString(R.string.title_activity_credit), getString(R.string.credit_details)));
-        listAbout.add(new AboutItem(null, getString(R.string.application_version),  versionName));
+        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.github_logo), getString(R.string.open_source), getString(R.string.open_in_github)));
+        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.ic_credit), getString(R.string.title_activity_credit), getString(R.string.credit_details)));
+        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.ic_action_info_outline), getString(R.string.application_version),  versionName));
 
 
         adapter = new AboutAdapter(listAbout, getApplicationContext());
@@ -88,9 +87,6 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
                 startActivity(intent);
                 break;
 
-            default:
-                Toast.makeText(this, getString(R.string.application_version)+ ": " +versionName, Toast.LENGTH_LONG).show();
-                break;
 
         }
     }

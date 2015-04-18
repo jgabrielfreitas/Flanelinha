@@ -1,0 +1,18 @@
+
+=================
+beta3 - changelog
+=================
+
+beta2 -> beta3
+
+Images:
+36dip
+#4a525f
+
+* Changes in Check-in (get current location method)
+* Changes in MainActivity (images)
+* New Credits layout
+* Changes in get location
+* MainActivity onCreate bug fixed!
+* Now, using Google Places API to get current location.
+* More fast and clean code, LocationNotFoundActivity created and new validations on GPS status and try getting location.

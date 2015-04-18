@@ -24,7 +24,7 @@
     <string name="optional_field_plus">(Campo opcional)\nEx: Em frente à padaria</string>
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
-    <string name="title_activity_find_car">Busca</string>
+    <string name="title_activity_find_car">Criar rota</string>
     <string name="title_activity_details_map">Detalhes</string>
     <string name="add_widget">Add widget</string>
     <string name="quick_checkin">Check-in rápido!</string>
@@ -35,15 +35,22 @@
     <string name="warning">Aviso</string>
     <string name="title_activity_credit">Créditos</string>
     <string name="credit_details">Detalhes</string>
-    <string name="credits" formatted="false">
-        <![CDATA[
-                <b>• Design/Colaboração</b><br> João Gabriel (@jgabrielfreitas)<br><br>
-
-                <b>• Google-Directions-Android</b><br>jd-alexander, ksarmalkar, licryle and<br>bitdeli-chef<br>
-            ]]>
-    </string>
     <string name="close">Fechar</string>
     <string name="title_activity_about_application">Sobre</string>
+    <string name="design_and_code"><![CDATA[Design & Código]]></string>
+    <string name="jgabrielfreitas">JGabrielFreitas</string>
+    <string name="github">GitHub</string>
+    <string name="data_base">Banco de dados</string>
+    <string name="cristian_danner">Cristian Danner</string>
+    <string name="router_lib">Google Directions Android</string>
+    <string name="google_lib_router_creator">jd-alexander</string>
+    <string name="getting_your_location_please_wait">Buscando a sua localização.\nPor favor, aguarde..</string>
+    <string name="cant_get_location">Não foi possível pegar a sua localização</string>
+    <string name="getting_your_location">Carregando..</string>
+    <string name="title_activity_location_not_found">Sem localização</string>
+    <string name="location_not_found">Não foi possível obter\na sua localização. Verifique sua internet e tente novamente!</string>
+    <string name="creating_route">Criando rota</string>
+    <string name="register_error">Erro na leitura do Cadastro</string>
 
 
 </resources>
