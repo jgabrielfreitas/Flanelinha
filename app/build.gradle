@@ -31,8 +31,8 @@ android {
         applicationId "br.com.manta.mantaray"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 3
-        versionName 'beta3'
+        versionCode 4
+        versionName 'beta4'
         signingConfig signingConfigs.JGabrielFreitas
     }
     buildTypes {
@@ -52,7 +52,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/xstream-1.4.7.jar')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.google.android.gms:play-services:7.+'
