@@ -1,25 +1,19 @@
 package br.com.manta.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -27,129 +21,167 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import br.com.manta.mantaray.CustomScrollView;
+import br.com.manta.informations.LocationAddress;
+import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.R;
-import br.com.manta.mantaray.ResizeAnimation;
 import br.com.manta.mantaray.Utils;
 
-public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener,
-                                                                  GoogleMap.OnMapLongClickListener {
+public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
-    private Button    checkinButton;
-    private TextView  noteTextView;
-    private SupportMapFragment supportMapFragment;
-    private CustomScrollView   checkinScrollView;
-    EditText localNameEditText;
-    EditText detailsLocalEditText;
-    RelativeLayout relativeLayoutNote;
-    LatLng currentPosition;
-    Marker marker;
+    FloatingActionButton floatAbout;
+    FloatingActionButton floatCheckin;
+    FloatingActionButton floatFindCar;
+    TextView streetTextView;
+    TextView stateTextView;
     MarkerOptions markerOptions;
-    private boolean mMapViewExpanded = false;
-    private String  titleMarker      = "Você está aqui!";
-    private String  titleNewMarker   = "Local escolhido";
-    public static Location location;  // user location
-    Animation fadeIn;
-    Animation fadeOut;
+    Marker marker;
+    Location location;
+    private String titleMarker = "Você está aqui!";
+    private String titleNewMarker = "Local escolhido";
+    private LocationManager locationManager;
+    LocationXml locationXml = new LocationXml();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkin);
+        setContentView(R.layout.activity_checkin2);
+
+        gettingInformations();
+
         setUpMapIfNeeded();
         instanceViews();
-
-        if(getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-        fadeIn  = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is NOT part of this app's task, so create a new task
-                    // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent) // Add all of this activity's parents to the back stack
-                                                 .startActivities(); // Navigate up to the closest parent
-                } else {
-                    // This activity is part of this app's task, so simply
-                    // navigate up to the logical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void instanceViews() {
-        noteTextView  = (TextView) findViewById(R.id.noteTextView);
-        checkinButton = (Button)   findViewById(R.id.checkinButton);
-        checkinScrollView  = (CustomScrollView) findViewById(R.id.checkinScrollView);
-        relativeLayoutNote = (RelativeLayout)   findViewById(R.id.relativeLayoutNote);
+
+        streetTextView = (TextView) findViewById(R.id.streetTextView);
+        stateTextView = (TextView) findViewById(R.id.stateTextView);
+
+        floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
+        floatAbout.setIcon(R.drawable.ic_action_info);
+        floatAbout.setSize(FloatingActionButton.SIZE_MINI);
+
+        floatCheckin = (FloatingActionButton) findViewById(R.id.fab_menu_checkin);
+        floatCheckin.setIcon(R.drawable.ic_action_room);
+        floatCheckin.setSize(FloatingActionButton.SIZE_MINI);
+
+        floatFindCar = (FloatingActionButton) findViewById(R.id.fab_menu_find_car);
+        floatFindCar.setIcon(R.drawable.ic_action_explore);
+        floatFindCar.setSize(FloatingActionButton.SIZE_MINI);
 
 
-        localNameEditText    = (EditText) findViewById(R.id.localNameEditText);
-        detailsLocalEditText = (EditText) findViewById(R.id.detailsLocalEditText);
-
-        noteTextView.setText(Html.fromHtml(getString(R.string.note_not_expanded)));
-        checkinButton.setOnClickListener(this);
+        floatAbout.setOnClickListener(this);
+        floatCheckin.setOnClickListener(this);
+        floatFindCar.setOnClickListener(this);
         googleMap.setOnMapClickListener(this);
-        googleMap.setOnMapLongClickListener(this);
+
     }
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (googleMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            googleMap = supportMapFragment.getMap();
+            googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
-            if (googleMap != null)
-                setUpMap();
+//            if (googleMap != null)
+            setUpMap();
         }
     }
 
     private void setUpMap() {
 
-        currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
-
         markerOptions = new MarkerOptions();
-        markerOptions.position(currentPosition).title(titleMarker).draggable(true);
+        markerOptions.position(Utils.getCurrentPlace().getPlaceList().get(0).getLatLng()).title(titleMarker);
 
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
         zoomInCurrentLocation();
+
+        setAddress(Utils.getLocation(locationManager));
+    }
+
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.fab_about:
+                closeFloatMenu();
+                Intent intent_about = new Intent(this, AboutApplicationActivity.class);
+                startActivity(intent_about);
+                break;
+
+            case R.id.fab_menu_find_car:
+
+                if (Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
+                    Intent intent_find = new Intent(this, FindCarActivity.class);
+                    startActivity(intent_find);
+                } else
+                    Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
+
+                closeFloatMenu();
+
+                break;
+
+            case R.id.fab_menu_checkin:
+
+                // just vibrate device
+                Utils.vibrateFeedback(getApplicationContext());
+                closeFloatMenu();
+
+                // save cache with position and information about the location
+                if (markerOptions != null) {
+                    String name = locationXml.name;
+                    String details = locationXml.address;
+                    Utils.createCheckin(name, details, markerOptions.getPosition(), this);
+
+                    Toast.makeText(this, "Seu check-in foi concluído com sucesso!", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.", Toast.LENGTH_LONG).show();
+
+                break;
+
+        }
+    }
+
+    // set address to TextViews (street name and state)
+    private void setAddress(Location mLocation) {
+
+        if (mLocation != null) {
+
+            double latitude = mLocation.getLatitude();
+            double longitude = mLocation.getLongitude();
+            LocationAddress.getAddressFromLocation(latitude, longitude, getApplicationContext(), new GeocoderHandler());
+        }
+
     }
 
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+
+        // if any exception throw here,
+        // go to MainActivity
+        try {
+            setUpMapIfNeeded();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Utils.reliefValve(this);
+        }
     }
 
-    public void onClick(View v) {
+    private synchronized void gettingInformations() {
 
-        // just vibrate device
-        Utils.vibrateFeedback(getApplicationContext());
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    }
 
-        // save cache with position and information about the location
-        if(markerOptions != null) {
-            String name    = localNameEditText.getText().toString();
-            String details = detailsLocalEditText.getText().toString();
-            Utils.createCheckin(name, details, markerOptions.getPosition(), this);
-
-            Toast.makeText(this, "Seu check-in foi concluído com sucesso!",Toast.LENGTH_LONG).show();
-            finish();
-        } else
-            Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.",Toast.LENGTH_LONG).show();
+    private void zoomInCurrentLocation() {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
     }
 
     public void onMapClick(LatLng latLng) {
+
+        closeFloatMenu();
 
         // Creating a marker
         markerOptions = new MarkerOptions();
@@ -174,61 +206,50 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
 
-     }
+        zoomInCurrentLocation();
 
-    public void onMapLongClick(LatLng latLng) {
-
-        Utils.vibrateFeedback(this);
-        animateMapView();
+        location = new Location(locationManager.NETWORK_PROVIDER);
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
+        setAddress(location);
     }
 
-    private void animateMapView() {
+    private class GeocoderHandler extends Handler {
+        public void handleMessage(Message message) {
 
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) supportMapFragment.getView().getLayoutParams();
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    break;
+                default:
+                    locationAddress = null;
+            }
 
-        ResizeAnimation a = new ResizeAnimation(supportMapFragment.getView());
-        a.setDuration(500);
+            String[] address = locationAddress.split(";");
 
-        if (!getMapViewStatus()) {
-            mMapViewExpanded = true;
-            a.setParams(lp.height, dpToPx(getResources(), 400));
-            checkinScrollView.setEnableScrolling(false);
-            changeTextNote(Html.fromHtml(getString(R.string.note_expanded)));
-            zoomInCurrentLocation();
-        } else {
-            checkinScrollView.setEnableScrolling(true);
-            mMapViewExpanded = false;
-            a.setParams(lp.height, dpToPx(getResources(), 150));
-            changeTextNote(Html.fromHtml(getString(R.string.note_not_expanded)));
-            zoomInCurrentLocation();
+            try {
+                streetTextView.setText(address[0]);
+                stateTextView.setText(address[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                streetTextView.setText("- - -");
+                stateTextView.setText("- - -");
+            }
+
+
+            // write location name—
+            locationXml.name = streetTextView.getText().toString();
+            locationXml.address = stateTextView.getText().toString();
+
         }
-        supportMapFragment.getView().startAnimation(a);
     }
 
-    private boolean getMapViewStatus() {
-        return mMapViewExpanded;
+    private void closeFloatMenu() {
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
+        if (menu.isExpanded())
+            menu.collapse();
     }
 
-    public int dpToPx(Resources res, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
-    }
-
-    private void changeTextNote(Spanned note){
-        relativeLayoutNote.startAnimation(fadeOut);
-        noteTextView.startAnimation(fadeOut);
-        noteTextView.setText(note);
-        noteTextView.startAnimation(fadeIn);
-        relativeLayoutNote.startAnimation(fadeIn);
-    }
-
-    private void zoomInCurrentLocation(){
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15));
-    }
-
-    public void onBackPressed() {
-        if (mMapViewExpanded)
-            animateMapView();
-        else
-            super.onBackPressed();
-    }
 }
