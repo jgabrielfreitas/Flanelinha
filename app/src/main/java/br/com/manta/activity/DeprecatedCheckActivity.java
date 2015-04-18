@@ -32,7 +32,7 @@ import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.ResizeAnimation;
 import br.com.manta.mantaray.Utils;
 
-public class OldCheckActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener,
+public class DeprecatedCheckActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener,
                                                                   GoogleMap.OnMapLongClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.

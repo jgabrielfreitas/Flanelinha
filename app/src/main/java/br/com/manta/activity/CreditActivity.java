@@ -13,10 +13,11 @@ import br.com.manta.adapter.ExpandableListAdapter;
 import br.com.manta.credit.Contributor;
 import br.com.manta.credit.Link;
 import br.com.manta.mantaray.R;
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardExpand;
 
 public class CreditActivity extends ActionBarActivity {
 
-    SparseArray<Contributor> groups = new SparseArray<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,32 +27,22 @@ public class CreditActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         createData();
-        ExpandableListView listView = (ExpandableListView) findViewById(R.id.creditExpandableListView);
-        ExpandableListAdapter adapter = new ExpandableListAdapter(this,groups);
-        listView.setAdapter(adapter);
     }
 
     public void createData() {
 
-        // create contributors
-        Contributor design_and_code = new Contributor(getString(R.string.jgabrielfreitas)); // name
-        design_and_code.children.add(new Link(null, null, getString(R.string.design_and_code))); // contribution in the application
-        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/u/0/+Jo%C3%A3oGabrielDeAndradeFreitas/posts", "+ João Gabriel")); // link
-        design_and_code.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jgabrielfreitas", getString(R.string.github))); // link
+        Card card = new Card(this);
 
-        Contributor data_base = new Contributor(getString(R.string.cristian_danner)); // name
-        data_base.children.add(new Link(null, null, getString(R.string.data_base))); // contribution in the application
-        data_base.children.add(new Link(getResources().getDrawable(R.drawable.google_plus), "https://plus.google.com/100896323147006054393/posts", "+ Cristian Danner")); // link
-        data_base.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/cristiandanner", getString(R.string.github))); // link
+        //This provide a simple (and useless) expand area
+        CardExpand expand = new CardExpand(this);
 
-        Contributor router_lib = new Contributor(getString(R.string.google_lib_router_creator)); // name
-        router_lib.children.add(new Link(null, null, getString(R.string.router_lib))); // contribution in the application
-        router_lib.children.add(new Link(getResources().getDrawable(R.drawable.github_logo), "https://github.com/jd-alexander/Google-Directions-Android", getString(R.string.github))); // link
+        //Set inner title in Expand Area
+        expand.setTitle("Expand Area");
 
-        // add and show contributors
-        groups.append(0, design_and_code);
-        groups.append(1, data_base);
-        groups.append(2, router_lib);
+        //Add expand to card
+        card.addCardExpand(expand);
+
+
     }
 
     // add arrow in action bar to back on activity

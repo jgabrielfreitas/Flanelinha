@@ -51,6 +51,7 @@
     <string name="location_not_found">Não foi possível obter\na sua localização. Verifique sua internet e tente novamente!</string>
     <string name="creating_route">Criando rota</string>
     <string name="register_error">Erro na leitura do Cadastro</string>
+    <string name="your_car_is_in">Seu carro está em:</string>
 
 
 </resources>

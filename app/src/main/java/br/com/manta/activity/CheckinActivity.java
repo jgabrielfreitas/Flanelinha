@@ -1,9 +1,11 @@
 package br.com.manta.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,11 +22,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import br.com.manta.informations.LocationAddress;
 import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.R;
 import br.com.manta.mantaray.Utils;
+import br.com.manta.route.Route;
+import br.com.manta.route.Routing;
+import br.com.manta.route.RoutingListener;
 
 public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
 
@@ -32,8 +38,10 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     FloatingActionButton floatAbout;
     FloatingActionButton floatCheckin;
     FloatingActionButton floatFindCar;
+    FloatingActionButton fab_car_founded;
     TextView streetTextView;
     TextView stateTextView;
+    TextView yourCarTextView;
     MarkerOptions markerOptions;
     Marker marker;
     Location location;
@@ -41,6 +49,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
     private String titleNewMarker = "Local escolhido";
     private LocationManager locationManager;
     LocationXml locationXml = new LocationXml();
+    public LocationXml cacheLocation; // checkin currentLocation
+    private LatLng currentPlace = Utils.getCurrentPlace().getCurrentPlace().getLatLng();
+    private boolean isFindingCar = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +65,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     private void instanceViews() {
 
+        fab_car_founded = (FloatingActionButton) findViewById(R.id.fab_car_founded);
+
         streetTextView = (TextView) findViewById(R.id.streetTextView);
         stateTextView = (TextView) findViewById(R.id.stateTextView);
+        yourCarTextView = (TextView) findViewById(R.id.yourCarTextView);
 
         floatAbout = (FloatingActionButton) findViewById(R.id.fab_about);
         floatAbout.setIcon(R.drawable.ic_action_info);
@@ -114,8 +128,9 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             case R.id.fab_menu_find_car:
 
                 if (Utils.justCheckFileCache(Utils.CACHE_LAST_CHECKIN)) {
-                    Intent intent_find = new Intent(this, FindCarActivity.class);
-                    startActivity(intent_find);
+//                    Intent intent_find = new Intent(this, FindCarActivity.class);
+//                    startActivity(intent_find);
+                    findCar();
                 } else
                     Toast.makeText(this, "Nenhuma localização anterior foi encontrada.\nVocê já realizou o check-in?", Toast.LENGTH_LONG).show();
 
@@ -181,6 +196,11 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
     public void onMapClick(LatLng latLng) {
 
+        if (isFindingCar == true) {
+            return;
+        }
+
+        yourCarTextView.setVisibility(View.INVISIBLE);
         closeFloatMenu();
 
         // Creating a marker
@@ -252,4 +272,132 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
             menu.collapse();
     }
 
+    /**
+     * FindCarActivity was moved to here.
+     * Using this way, the application use less network data.
+     */
+
+    private void findCar() {
+
+        cacheLocation = Utils.getInformationsAboutLastLocationFromCache(this);
+        RouteCreatorAsyncTask routeCreatorAsyncTask = new RouteCreatorAsyncTask();
+        routeCreatorAsyncTask.execute();
+    }
+
+    private class RouteCreatorAsyncTask extends AsyncTask<Void, Void, Void> implements RoutingListener, View.OnClickListener {
+
+        ProgressDialog dialog;
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            isFindingCar = true;
+            dialog = ProgressDialog.show(CheckinActivity.this, "Aguarde", getString(R.string.creating_route), false, false);
+            yourCarTextView.setVisibility(View.VISIBLE);
+            googleMap.clear();
+        }
+
+        protected Void doInBackground(Void... params) {
+
+            // create and draw the route
+            LatLng end = new LatLng(cacheLocation.latitude, cacheLocation.longitude);
+            Routing routing = new Routing(Routing.TravelMode.WALKING);
+            routing.registerListener(this);
+            routing.execute(currentPlace, end);
+
+            return null;
+        }
+
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            // add in google map the marker with check-in location
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(cacheLocation.latitude, cacheLocation.longitude)).title("Seu carro").snippet("Último check-in");
+
+            // add in google map the user's current location
+            MarkerOptions markerOptionsCurrent = new MarkerOptions();
+            markerOptionsCurrent.position(currentPlace).title("Você").snippet("Ponto de partida");
+
+            Marker marker = googleMap.addMarker(markerOptions);
+            googleMap.addMarker(markerOptionsCurrent);
+            marker.showInfoWindow();
+
+            // set car location to textviews
+            streetTextView.setText(cacheLocation.name);
+            stateTextView.setText(cacheLocation.address);
+
+            googleMap.setMyLocationEnabled(true);
+
+            // show founded car FAB
+            fab_car_founded.setVisibility(View.VISIBLE);
+            fab_car_founded.setOnClickListener(this);
+        }
+
+        public void onRoutingFailure() {
+        }
+
+        public void onRoutingStart() {
+        }
+
+        public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
+
+            yourCarTextView.setVisibility(View.VISIBLE);
+            PolylineOptions polyoptions = new PolylineOptions();
+            polyoptions.color(getResources().getColor(R.color.router_color));
+            polyoptions.width(15);
+            polyoptions.addAll(mPolyOptions.getPoints());
+            googleMap.addPolyline(polyoptions);
+
+            if (dialog != null && dialog.isShowing())
+                dialog.dismiss();
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPlace, 15));
+        }
+
+        // fab_car_founded's onclick
+        public void onClick(View v) {
+
+            Utils.vibrateFeedback(CheckinActivity.this);
+            Toast.makeText(CheckinActivity.this, "Concluído.", Toast.LENGTH_LONG).show();
+            googleMap.clear();
+
+            // add in google map the last position
+            MarkerOptions markerLastPosition = new MarkerOptions();
+            markerLastPosition.position(new LatLng(cacheLocation.latitude, cacheLocation.longitude)).title("Seu carro").snippet("Último check-in");
+            marker = googleMap.addMarker(markerLastPosition);
+
+            fab_car_founded.setVisibility(View.INVISIBLE);
+
+            Utils.deleteCache(Utils.CACHE_LAST_CHECKIN);
+            googleMap.setMyLocationEnabled(false);
+            isFindingCar = false;
+
+            zoomInCurrentLocation();
+        }
+    }
+
+    public void onBackPressed() {
+
+        if (isFindingCar == true) {
+            fab_car_founded.setVisibility(View.INVISIBLE);
+            yourCarTextView.setVisibility(View.INVISIBLE);
+            googleMap.setMyLocationEnabled(false);
+            googleMap.clear();
+
+            markerOptions = new MarkerOptions();
+            markerOptions.position(Utils.getCurrentPlace().getPlaceList().get(0).getLatLng()).title(titleMarker);
+
+            marker = googleMap.addMarker(markerOptions);
+            marker.showInfoWindow();
+
+            zoomInCurrentLocation();
+
+            setAddress(Utils.getLocation(locationManager));
+            isFindingCar = false;
+            return;
+        }
+
+        super.onBackPressed();
+    }
 }

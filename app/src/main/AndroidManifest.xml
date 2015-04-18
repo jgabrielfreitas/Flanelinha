@@ -40,7 +40,7 @@
         -->
 
         <activity
-            android:name="br.com.manta.activity.OldCheckActivity"
+            android:name="br.com.manta.activity.DeprecatedCheckActivity"
             android:label="@string/title_activity_checkin"
             android:parentActivityName="br.com.manta.activity.MainActivity"
             android:windowSoftInputMode="stateHidden" >
@@ -55,7 +55,7 @@
             android:exported="false" />
 
         <activity
-            android:name="br.com.manta.activity.FindCarActivity"
+            android:name="br.com.manta.activity.DeprecatedFindCarActivity"
             android:label="@string/title_activity_find_car"
             android:parentActivityName="br.com.manta.activity.MainActivity" >
             <meta-data
