@@ -18,4 +18,6 @@
     <color name="map_color_pressed">#4D595F62</color>
     <color name="map_color_not_pressed">#4DA9B5BC</color>
     <color name="router_color">#303F9F</color>
+    <color name="car_founded_button_color">#4CAF50</color>
+    <color name="car_founded_button_color_pressed">#419544</color>
 </resources>

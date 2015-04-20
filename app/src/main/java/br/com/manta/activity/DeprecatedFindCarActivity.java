@@ -1,10 +1,6 @@
 package br.com.manta.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -28,7 +24,7 @@ import br.com.manta.route.Route;
 import br.com.manta.route.Routing;
 import br.com.manta.route.RoutingListener;
 
-public class FindCarActivity extends ActionBarActivity implements View.OnClickListener {
+public class DeprecatedFindCarActivity extends ActionBarActivity implements View.OnClickListener {
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     public  LocationXml cacheLocation; // checkin currentLocation
@@ -68,7 +64,6 @@ public class FindCarActivity extends ActionBarActivity implements View.OnClickLi
         carFoundButton.setOnClickListener(this);
 
     }
-
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
@@ -110,7 +105,7 @@ public class FindCarActivity extends ActionBarActivity implements View.OnClickLi
         protected void onPreExecute() {
             super.onPreExecute();
 
-            dialog = ProgressDialog.show(FindCarActivity.this, "Aguarde", getString(R.string.creating_route), false, false);
+            dialog = ProgressDialog.show(DeprecatedFindCarActivity.this, "Aguarde", getString(R.string.creating_route), false, false);
         }
 
         protected Void doInBackground(Void... params) {
