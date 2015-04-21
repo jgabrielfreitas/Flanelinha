@@ -5,16 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
-import android.util.SparseArray;
 import android.view.MenuItem;
-import android.widget.ExpandableListView;
 
-import br.com.manta.adapter.ExpandableListAdapter;
-import br.com.manta.credit.Contributor;
-import br.com.manta.credit.Link;
 import br.com.manta.mantaray.R;
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardExpand;
+import it.gmariotti.cardslib.library.internal.CardHeader;
 
 public class CreditActivity extends ActionBarActivity {
 
@@ -31,17 +26,23 @@ public class CreditActivity extends ActionBarActivity {
 
     public void createData() {
 
+        /**
+         * look this
+         * https://github.com/gabrielemariotti/cardslib/blob/master/doc/GUIDE.md
+         * */
+
+        //Create a Card
         Card card = new Card(this);
 
-        //This provide a simple (and useless) expand area
-        CardExpand expand = new CardExpand(this);
+        //Create a CardHeader
+        CardHeader header = new CardHeader(this);
 
-        //Set inner title in Expand Area
-        expand.setTitle("Expand Area");
+        //Add Header to card
+        card.addCardHeader(header);
 
-        //Add expand to card
-        card.addCardExpand(expand);
-
+        //Set card in the cardView
+        CardViewNative cardView = (CardViewNative) findViewById(R.id.carddemo);
+        cardView.setCard(card);
 
     }
 

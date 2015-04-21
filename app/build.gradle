@@ -52,12 +52,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/xstream-1.4.7.jar')
+    compile files('libs/cardlib.aar')
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.github.gabrielemariotti.cards:library:1.+'
     compile 'com.google.android.gms:play-services:7.+'
     compile 'com.crashlytics.android:crashlytics:1.+'
     compile 'com.getbase:floatingactionbutton:1.+'
+    compile 'com.github.gabrielemariotti.cards:library:1.9.1'
 }

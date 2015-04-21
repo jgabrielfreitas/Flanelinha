@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.PlaceFilter;
@@ -26,7 +27,7 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Crashlytics.start(this);
+        Crashlytics.start(this);
         setContentView(R.layout.activity_main);
 
         userCurrentPlace = new UserCurrentPlace(this);
