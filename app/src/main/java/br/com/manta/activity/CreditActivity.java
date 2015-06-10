@@ -41,8 +41,8 @@ public class CreditActivity extends ActionBarActivity {
         card.addCardHeader(header);
 
         //Set card in the cardView
-        CardViewNative cardView = (CardViewNative) findViewById(R.id.carddemo);
-        cardView.setCard(card);
+//        CardViewNative cardView = (CardViewNative) findViewById(R.id.carddemo);
+//        cardView.setCard(card);
 
     }
 

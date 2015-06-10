@@ -37,10 +37,7 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
     // if disabled, create a dialog to enabled
     private boolean isGpsEnabled() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            return false;
-        else
-            return true;
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     private void instanceViews() {
@@ -50,6 +47,12 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
 
         Utils.PACKAGE_NAME = getApplication().getPackageName();
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    // only for debug
+    private void insertLocationsInBase() {
+
+        return;
     }
 
 
@@ -94,10 +97,13 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
     protected void onResume() {
         super.onResume();
 
-        if (isGpsEnabled()) {
-            Utils.buildAlertMessageNoGps(this);
-            return;
-        }
-        buildPeddingResult();
+        insertLocationsInBase();
+
+
+//        if (isGpsEnabled()) {
+//            Utils.buildAlertMessageNoGps(this);
+//            return;
+//        }
+//        buildPeddingResult();
     }
 }
