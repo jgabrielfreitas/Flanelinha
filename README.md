@@ -1,7 +1,8 @@
 Flanelinha - Onde Parei?
 ==========
 
-<i>Com o “Flanelinha, será muito mais fácil encontrar onde o seu carro está.</i>
+<i>Com o “Flanelinha, será muito mais fácil encontrar onde o seu carro está.</i><br>
+<i>Play Store link: https://play.google.com/store/apps/details?id=br.com.manta.mantaray&hl=pt_BR</i> 
 
 Detalhes: 
 -
