@@ -49,13 +49,6 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    // only for debug
-    private void insertLocationsInBase() {
-
-        return;
-    }
-
-
     private void doIntent(Class <?> classToGo, boolean neededKill) {
         Intent intent = new Intent(this, classToGo);
         startActivity(intent);
@@ -97,13 +90,10 @@ public class MainActivity extends Activity implements ResultCallback<PlaceLikeli
     protected void onResume() {
         super.onResume();
 
-        insertLocationsInBase();
-
-
-//        if (isGpsEnabled()) {
-//            Utils.buildAlertMessageNoGps(this);
-//            return;
-//        }
-//        buildPeddingResult();
+        if (isGpsEnabled() == false) {
+            Utils.buildAlertMessageNoGps(this);
+            return;
+        }
+        buildPeddingResult();
     }
 }

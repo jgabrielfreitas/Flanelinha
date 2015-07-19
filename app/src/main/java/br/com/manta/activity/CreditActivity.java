@@ -1,49 +1,51 @@
 package br.com.manta.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.manta.adapter.AboutAdapter;
+import br.com.manta.mantaray.AboutItem;
 import br.com.manta.mantaray.R;
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
+import br.com.manta.mantaray.Utils;
 
-public class CreditActivity extends ActionBarActivity {
+public class CreditActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
+    ListView aboutListView;
+    List<AboutItem> listAbout = new ArrayList<>();
+    AboutAdapter adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credit);
+        setContentView(R.layout.activity_about_application);
 
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        createData();
+        instanceViews();
     }
 
-    public void createData() {
+    public void instanceViews() {
 
-        /**
-         * look this
-         * https://github.com/gabrielemariotti/cardslib/blob/master/doc/GUIDE.md
-         * */
+        aboutListView = (ListView) findViewById(R.id.aboutListView);
 
-        //Create a Card
-        Card card = new Card(this);
+        listAbout.add(new AboutItem(null, "Desenvolvedor", "João Gabriel de Andrade Freitas"));
+        listAbout.add(new AboutItem(null, "Email", "jgabrielafreitas@gmail.com"));
+        listAbout.add(new AboutItem(null, "Twitter", "@JGabrielFreitas"));
 
-        //Create a CardHeader
-        CardHeader header = new CardHeader(this);
-
-        //Add Header to card
-        card.addCardHeader(header);
-
-        //Set card in the cardView
-//        CardViewNative cardView = (CardViewNative) findViewById(R.id.carddemo);
-//        cardView.setCard(card);
-
+        adapter = new AboutAdapter(listAbout, getApplicationContext());
+        aboutListView.setAdapter(adapter);
+        aboutListView.setOnItemClickListener(this);
     }
 
     // add arrow in action bar to back on activity
@@ -67,4 +69,29 @@ public class CreditActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        switch (position) {
+
+            case 1:
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"jgabrielafreitas@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Flanelinha - Onde Parei?");
+
+                startActivity(Intent.createChooser(intent, "Enviar com..."));
+                break;
+
+            case 2:
+
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?screen_name=JGabrielFreitas")));
+                } catch (Exception e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/#!/JGabrielFreitas")));
+                }
+                break;
+
+        }
+    }
 }

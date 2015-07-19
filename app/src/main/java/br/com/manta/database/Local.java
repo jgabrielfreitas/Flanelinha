@@ -69,4 +69,14 @@ public class Local {
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
+
+    public String toString() {
+        return "Local{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", localName='" + localName + '\'' +
+                ", dateTime='" + dateTime + '\'' +
+                '}';
+    }
 }

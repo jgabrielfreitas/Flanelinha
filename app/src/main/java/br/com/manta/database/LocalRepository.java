@@ -18,157 +18,45 @@ public class LocalRepository extends SQLiteOpenHelper {
 
     public static int DATABASE_VERSION = 1;
     public static String DATABASE_NAME = "Local.db";
-    public static String TABLE_LOCAL   = "LocalRepository";
 
-    public static String KEY_ID        = "id";
-    public static String KEY_LATITUDE  = "latitude";
-    public static String KEY_LONGITUDE = "longitude";
-    public static String KEY_LOCALNAME = "local_name";
-    public static String KEY_DATETIME  = "datetime";
+    // Base Tables
+    public static final String TABLE_ID        = "ID";
+    public static final String TABLE_NAME      = "flanelinha_locations";
+    public static final String TABLE_LATITUDE  = "LATITUDE";
+    public static final String TABLE_LONGITUDE = "LONGITUDE";
+    public static final String TABLE_DATE_HOUR = "DATE_HOUR";
+    public static final String TABLE_LOCATION_ADDRESS = "ADDRESS";
 
-    private Context mCxt;
+    /**
+     * CREATE TABLE "flanelinha_locations_db"
+     * ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,
+     * "latitude" TEXT,
+     * "longitude" TEXT,
+     * "DATE_HOUR" TEXT);
+     * */
 
-    public static LocalRepository getInstance(Context ctx) {
-        if (mLocalRepository == null){
-            mLocalRepository = new LocalRepository(ctx.getApplicationContext());
-        }
-        return mLocalRepository;
-    }
+    public static final String CREATE_LOCATION_BASE = "CREATE TABLE IF NOT EXISTS '" + TABLE_NAME + "' " +
+            " ('"  + TABLE_ID        + "' INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL ," +
+            " '"   + TABLE_LATITUDE  + "' TEXT, " +
+            " '"   + TABLE_LONGITUDE + "' TEXT, " +
+            " '"   + TABLE_DATE_HOUR + "' TEXT, " +
+            " '"   + TABLE_LOCATION_ADDRESS + "' TEXT ); ";
+
 
     public LocalRepository (Context ctx){
-        super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
-        this.mCxt = ctx;
+        super(ctx, TABLE_NAME, null, DATABASE_VERSION);
     }
 
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOCAL_TABLE = "CREATE TABLE "
-                + TABLE_LOCAL
-                + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                KEY_LATITUDE  + " REAL," +
-                KEY_LONGITUDE + " REAL," +
-                KEY_LOCALNAME + " TEXT," +
-                KEY_DATETIME  + " TEXT"  + ");";
-        db.execSQL(CREATE_LOCAL_TABLE);
+        db.execSQL(CREATE_LOCATION_BASE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCAL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 
-    public void addLocal(Local local) {
 
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_LATITUDE,  local.getLatitude());
-        values.put(KEY_LONGITUDE, local.getLongitude());
-        values.put(KEY_LOCALNAME, local.getLocalName());
-        values.put(KEY_DATETIME,  local.getDateTime());
-
-        db.insert(TABLE_LOCAL, null, values);
-        db.close();
-    }
-
-    public Local getLocal(int id)  {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_LOCAL, new String[] { KEY_ID,
-                        KEY_LATITUDE,
-                        KEY_LONGITUDE,
-                        KEY_LOCALNAME,
-                        KEY_DATETIME
-                }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        Local local = new Local(
-                cursor.getInt(0),
-                cursor.getDouble(1),
-                cursor.getDouble(1),
-                cursor.getString(3),
-                cursor.getString(4) );
-
-        return  local;
-    }
-
-    public List<Local> getAllLocal(){
-        List<Local> localList = new ArrayList<>();
-
-       // String selectQuery = "SELECT  * FROM " + TABLE_LOCAL + " ORDER BY " + KEY_ID + " DESC" ;
-        String selectQuery = "SELECT  * FROM " + TABLE_LOCAL;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-
-                Local local = new Local();
-
-                local.setId(cursor.getInt(0));
-                local.setLatitude(cursor.getDouble(1));
-                local.setLongitude(cursor.getDouble(2));
-                local.setLocalName(cursor.getString(3));
-                local.setDateTime(cursor.getString(4));
-
-                localList.add(local);
-
-            } while (cursor.moveToNext());
-        }
-        return localList;
-    }
-
-    public int getLocalCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_LOCAL;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.moveToFirst();
-        cursor.close();
-
-        return cursor.getCount();
-    }
-
-    public int updateLocal(Local local) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_LATITUDE,  local.getLatitude());
-        values.put(KEY_LONGITUDE, local.getLongitude());
-        values.put(KEY_LOCALNAME, local.getLocalName());
-        values.put(KEY_DATETIME,  local.getDateTime());
-
-        int i = db.update(TABLE_LOCAL, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(local.getId()) });
-
-        db.close();
-        return i;
-    }
-
-
-    public Long getLastInsertId() {
-        Long index = 0l;
-        SQLiteDatabase sdb = getReadableDatabase();
-        Cursor cursor = sdb.query(
-                "sqlite_sequence",
-                new String[] { "seq" },
-                "name = ?",
-                new String[] { TABLE_LOCAL },
-                null,
-                null,
-                null,
-                null
-        );
-        if (cursor.moveToFirst()) {
-            index = cursor.getLong(cursor.getColumnIndex("seq"));
-        }
-        cursor.close();
-        return index;
-    }
 
 
 

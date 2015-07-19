@@ -33,8 +33,8 @@
     <string name="application_version">Versão do aplicativo</string>
     <string name="warning_checkin">Você possui um check-in realizado anteriormente.\n\nDeseja excluí-lo e realizar um novo?</string>
     <string name="warning">Aviso</string>
-    <string name="title_activity_credit">Créditos</string>
-    <string name="credit_details">Detalhes</string>
+    <string name="title_activity_credit">Contato</string>
+    <string name="credit_details">Sobre o autor</string>
     <string name="close">Fechar</string>
     <string name="title_activity_about_application">Sobre</string>
     <string name="design_and_code"><![CDATA[Design & Código]]></string>

@@ -1,6 +1,7 @@
 package br.com.manta.database;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -15,8 +16,7 @@ public class LocationObjectBase {
 
     public LocationObjectBase() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-        GregorianCalendar calendar = new GregorianCalendar();
-        dateHour = simpleDateFormat.format(calendar);
+        dateHour = simpleDateFormat.format(Calendar.getInstance().getTime());
     }
 
     public String getLatitude() {
@@ -45,10 +45,6 @@ public class LocationObjectBase {
 
     public String getDateHour() {
         return dateHour;
-    }
-
-    public void setDateHour(String dateHour) {
-        this.dateHour = dateHour;
     }
 
     public String toString() {

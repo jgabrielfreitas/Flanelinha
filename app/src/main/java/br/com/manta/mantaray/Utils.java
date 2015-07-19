@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import br.com.manta.activity.MainActivity;
+import br.com.manta.database.LocationDAO;
+import br.com.manta.database.LocationObjectBase;
 import br.com.manta.informations.LocationXml;
 import br.com.manta.informations.UserCurrentPlace;
 import br.com.manta.services.GPSTracker;
@@ -145,11 +147,11 @@ public class Utils extends Application {
             lastLocation.address   = details;
 
             XStream xstream = new XStream(new DomDriver());
-            xstream.processAnnotations(new Class[] { LocationXml.class });
+            xstream.processAnnotations(new Class[]{LocationXml.class});
 
-            String dados = xstream.toXML(lastLocation);
+            String dataToSave = xstream.toXML(lastLocation);
 
-            createCache(Utils.CACHE_LAST_CHECKIN, dados, activity.getApplicationContext(), activity.getClass().toString());
+            createCache(Utils.CACHE_LAST_CHECKIN, dataToSave, activity.getApplicationContext(), activity.getClass().toString());
 
         } catch (Exception e) {
             e.printStackTrace();

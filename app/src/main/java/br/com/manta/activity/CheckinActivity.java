@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import br.com.manta.database.Local;
+import br.com.manta.database.LocationDAO;
+import br.com.manta.database.LocationObjectBase;
 import br.com.manta.informations.LocationAddress;
 import br.com.manta.informations.LocationXml;
 import br.com.manta.mantaray.R;
@@ -150,6 +154,16 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
                     String details = locationXml.address;
                     Utils.createCheckin(name, details, markerOptions.getPosition(), this);
 
+                    // create the object to save in base
+                    LocationObjectBase locationObjectBase = new LocationObjectBase();
+                    locationObjectBase.setAddress(name);
+                    locationObjectBase.setLatitude(String.valueOf(markerOptions.getPosition().latitude));
+                    locationObjectBase.setLongitude(String.valueOf(markerOptions.getPosition().longitude));
+
+                    // instance DAO and insert into database
+                    LocationDAO locationDAO = new LocationDAO(this);
+                    locationDAO.insert(locationObjectBase);
+
                     Toast.makeText(this, "Seu check-in foi concluído com sucesso!", Toast.LENGTH_LONG).show();
                 } else
                     Toast.makeText(this, "Oops.. houve um erro ao realizar o check-in.", Toast.LENGTH_LONG).show();
@@ -178,6 +192,18 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         // go to MainActivity
         try {
             setUpMapIfNeeded();
+
+
+            LocationDAO locationDAO = new LocationDAO(this);
+            locationDAO.showAllColumnsInLog();
+            for (Local local : locationDAO.getAllLocal()) {
+                Log.e("LOCAL_DAO", local.toString());
+            }
+
+            if (locationDAO.getLocalCount() <= 0)
+                Log.e("LOCAL_DAO", "THE BASE IS EMPTY");
+
+
         } catch (Exception e) {
 
             e.printStackTrace();
