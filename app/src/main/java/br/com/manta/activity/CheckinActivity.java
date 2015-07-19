@@ -193,17 +193,6 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         try {
             setUpMapIfNeeded();
 
-
-            LocationDAO locationDAO = new LocationDAO(this);
-            locationDAO.showAllColumnsInLog();
-            for (Local local : locationDAO.getAllLocal()) {
-                Log.e("LOCAL_DAO", local.toString());
-            }
-
-            if (locationDAO.getLocalCount() <= 0)
-                Log.e("LOCAL_DAO", "THE BASE IS EMPTY");
-
-
         } catch (Exception e) {
 
             e.printStackTrace();
