@@ -36,7 +36,7 @@ import br.com.manta.route.Route;
 import br.com.manta.route.Routing;
 import br.com.manta.route.RoutingListener;
 
-public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener {
+public class CheckinActivity extends ActionBarActivity implements View.OnClickListener, GoogleMap.OnMapClickListener , GoogleMap.OnMapLongClickListener{
 
     private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     FloatingActionButton floatAbout;
@@ -92,7 +92,7 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         floatCheckin.setOnClickListener(this);
         floatFindCar.setOnClickListener(this);
         googleMap.setOnMapClickListener(this);
-
+        googleMap.setOnMapLongClickListener(this);
     }
 
     private void setUpMapIfNeeded() {
@@ -247,6 +247,13 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
         location.setLatitude(latLng.latitude);
         location.setLongitude(latLng.longitude);
         setAddress(location);
+    }
+
+    public void onMapLongClick(LatLng latLng) {
+        // clear all markers in map and
+        // show his current location
+        googleMap.clear();
+        setUpMap();
     }
 
     private class GeocoderHandler extends Handler {
@@ -410,6 +417,12 @@ public class CheckinActivity extends ActionBarActivity implements View.OnClickLi
 
             setAddress(Utils.getLocation(locationManager));
             isFindingCar = false;
+            return;
+        }
+
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
+        if (menu.isExpanded()) {
+            menu.collapse();
             return;
         }
 

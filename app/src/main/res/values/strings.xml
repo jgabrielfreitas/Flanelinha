@@ -52,6 +52,21 @@
     <string name="creating_route">Criando rota..</string>
     <string name="register_error">Erro na leitura do Cadastro</string>
     <string name="your_car_is_in">Seu carro está em:</string>
+    <string name="share_app">Conheça o aplicativo "Flanelinha - Onde Parei?" \n https://goo.gl/Y9UjsF</string>
+    <string name="share_using">Compartilhar usando..</string>
+    <string name="do_you_like_this_app">Compartilhar</string>
+    <string name="share_to_your_friends">Compartilhe com seus amigos :)</string>
+    <string name="joao_gabriel_freitas">João Gabriel de Freitas</string>
+    <string name="my_twitter_name">\@JGabrielFreitas</string>
+    <string name="my_email">jgabrielafreitas@gmail.com</string>
+    <string name="my_name">João Gabriel de Andrade Freitas</string>
+    <string name="developer">Desenvolvedor</string>
+    <string name="email">Email</string>
+    <string name="twitter">Twitter</string>
+    <string name="google_plus">Google+</string>
+    <string name="linkedin">Linkedin</string>
+    <string name="share_with">Enviar com...</string>
+    <string name="flanelinha_where_did_i_part">Flanelinha - Onde Parei?</string>
 
 
 </resources>

@@ -45,6 +45,7 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
 
         listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.github_logo), getString(R.string.open_source), getString(R.string.open_in_github)));
         listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.ic_credit), getString(R.string.title_activity_credit), getString(R.string.credit_details)));
+        listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.ic_social_share), getString(R.string.do_you_like_this_app), getString(R.string.share_to_your_friends)));
         listAbout.add(new AboutItem(getResources().getDrawable(R.drawable.ic_action_info_outline), getString(R.string.application_version),  versionName));
 
 
@@ -85,6 +86,15 @@ public class AboutApplicationActivity extends ActionBarActivity implements Adapt
             case 1:
                 Intent intent = new Intent(this, CreditActivity.class);
                 startActivity(intent);
+                break;
+
+            case 2:
+
+                Intent intentShare = new Intent(Intent.ACTION_SEND);
+                intentShare.setType("text/plain");
+                intentShare.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app));
+
+                startActivity(Intent.createChooser(intentShare, getString(R.string.share_using)));
                 break;
 
 

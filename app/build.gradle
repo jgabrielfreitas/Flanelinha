@@ -20,8 +20,8 @@ android {
         JGabrielFreitas {
             keyAlias 'jgabrielfreitas'
             keyPassword 'jgaf1234'
-            storeFile file('/Users/JGabrielFreitas/JGabrielFreitas.jks') // mac
-//            storeFile file('C:/João/JGabrielFreitas')
+//            storeFile file('/Users/JGabrielFreitas/JGabrielFreitas.jks') // mac
+            storeFile file('C:/João/JGabrielFreitas')
             storePassword 'jgaf1234'
         }
     }
